@@ -1,5 +1,7 @@
 #include "Enemy.h"
-#include "GameConfig.h"
+#include<iostream>
+using namespace std;
+
 
 
 void Tank::draw(window& mainwin) const {
@@ -212,3 +214,79 @@ void Ship::draw(window& mainwin) const {
 }
 
 
+
+void Enemy::view(window& mainwin) {
+	for (int i = 0; i < tanknum; i++) {
+		tanks[i].draw(mainwin);
+	}
+	for (int i = 0; i < brigesnum; i++) {
+		bridges[i].draw(mainwin);
+	}
+	for (int i = 0; i < shipsnum; i++) {
+		ships[i].draw(mainwin);
+	}
+}
+
+void Enemy::update(int nspeed, int nlevel) {
+	srand(time(0));
+	speed = nspeed;
+	level = nlevel;
+	int otanknum = tanknum,
+		obrigesum = brigesnum,
+		oshipsnum = shipsnum;
+	// This formale needs to be changed
+	tanknum = level + speed;
+	brigesnum = level + speed;
+	shipsnum = level + speed;
+
+
+	for (int i = otanknum; i < tanknum; i++) {
+		int size = min_size + (rand() % (max_size - min_size - 1));
+		tanks[i].set_size(size);
+
+		int local_max_x = global_max_x - tanks[i].get_size();
+		int local_max_y = global_max_y - tanks[i].get_size();
+		int x = min_x + (rand() % (local_max_x - min_x - 1));
+		int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		tanks[i].set_x(x);
+		tanks[i].set_y(y);
+
+		int colori = floor(rand() % 4);
+		tanks[i].set_color(colors[colori]);
+	}
+	
+	
+	for (int i = obrigesum; i < brigesnum; i++) {
+		int size = min_size + (rand() % (max_size - min_size + 1));
+		bridges[i].set_size(size);
+
+		int local_max_x = global_max_x - bridges[i].get_size();
+		int local_max_y = global_max_y - bridges[i].get_size();
+		int x = min_x + (rand() % (local_max_x - min_x - 1));
+		int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		bridges[i].set_x(x);
+		bridges[i].set_y(y);
+
+		int colori = floor(rand() % 4);
+		bridges[i].set_color(colors[colori]);
+	}
+	
+	for (int i = oshipsnum; i < shipsnum; i++) {
+		int size = min_size + (rand() % (max_size - min_size + 1));
+		ships[i].set_size(size);
+
+		int local_max_x = global_max_x - ships[i].get_size();
+		int local_max_y = global_max_y - ships[i].get_size();
+		int x = min_x + (rand() % (local_max_x - min_x - 1));
+		int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		ships[i].set_x(x);
+		ships[i].set_y(y);
+
+		int colori = floor(rand()%4);
+		ships[i].set_color(colors[colori]);
+	}
+	
+}

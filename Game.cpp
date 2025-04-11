@@ -17,16 +17,18 @@ Game::Game()
 
 
 	//4- Create the Plane
-	//color cs[] = { BLUE, BLACK, BLUE };
- //	Player player(200, 200, 200.0, cs);
-	//player.draw(*pWind);
+	color cs[] = { BLUE, BLACK, BLUE };
+ 	Player player(550, 450, 100, cs);
+	player.draw(*pWind);
 
 	//5- Create the Bullet
 	//TODO: Add code to create and draw the Bullet
 
 	//6- Create the enemies
 	//TODO: Add code to create and draw enemies in random places
-
+	Enemy En;
+	En.update(0, 2);
+	En.view(*pWind);
 
 	//7- Create and clear the status bar
 	 clearStatusBar();

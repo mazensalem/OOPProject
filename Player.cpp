@@ -14,19 +14,19 @@ Player::Player(int ux, int uy, double usize, color c[]) {
 }
 
 void Player::draw(window& mainwin) const {
+	// The total width and height of the original drawing
 	int xtotal = 343, ytotal = 640;
 
 
-	int bx[] = { 120, 140, 150, 170, 190, 200, 225, 226, 342, 329, 214, 212, 284, 283, 209, 204, 178, 170,164, 139, 132, 57,56, 127, 127, 12, -1, 116 };
-	int by[] = { 220, 220, 70, 0, 65, 220, 221, 265, 471, 522, 407, 441, 555, 585, 567, 584, 586, 638, 586,585, 568, 585, 556, 442, 407, 523, 470, 266 };
-
-
+	// The positions of x, y for all the orignal points on the plane
 	int x[] = { 120, 140, 150, 170, 190, 200, 225, 225, 340, 330, 215, 210, 285, 285, 210, 205, 180, 170, 165, 140, 130, 55, 55, 125, 125, 10, 0, 115 };
 	int y[] = { 220, 220, 70, 0   , 65 , 220, 220, 265, 470, 520, 405, 440, 555, 585, 565, 585, 585, 640, 585,585, 570, 585, 555, 440, 405, 525, 470, 265 };
 
+	// The orignal position of the x, y for the cocapit of the plane
 	int x1[] = { 140, 150, 170, 190, 200 };
 	int y1[] = { 220, 70, 0, 65, 220, 220 };
 
+	// The orignal position of the x, y for the flame of the plane
 	int x2[] = { 180, 170, 165 };
 	int y2[] = {585, 640, 585};
 
