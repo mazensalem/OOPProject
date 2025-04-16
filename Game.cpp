@@ -2,9 +2,15 @@
 #include "GameConfig.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "StatusBar.h"
+#include "Bullet.h"
+#include "Background.h"
 #include <iostream>
+#include <sstream>
+
 using namespace std;
 
+Enemy En;
 Game::Game()
 {
 	//1 - Create the main window
@@ -14,28 +20,64 @@ Game::Game()
 	createToolbar();
 
 	//3 - create and draw the backgroundPlayingArea
+	BG.Draw(*pWind, 3, .7);
+	BG.settreey(50);
 
 
 	//4- Create the Plane
-	color cs[] = { BLUE, BLACK, BLUE };
- 	Player player(550, 450, 100, cs);
 	player.draw(*pWind);
 
 	//5- Create the Bullet
 	//TODO: Add code to create and draw the Bullet
+	player.drawbullets(*pWind);
 
 	//6- Create the enemies
 	//TODO: Add code to create and draw enemies in random places
-	Enemy En;
 	En.update(0, 2);
-	En.view(*pWind);
 
 	//7- Create and clear the status bar
-	 clearStatusBar();
+	Drawstatusbar(*pWind, 0, 5, 5, 50);
+	// clearStatusBar();
 }
 
 Game::~Game()
 {
+}
+
+
+void Game::DrawGame() {
+	// Backgroung
+	BG.Draw(*pWind, 3, .7);
+
+	// Player
+	player.draw(*pWind);
+
+	// Bullets
+	player.drawbullets(*pWind);
+
+	// Enemies
+	En.view(*pWind);
+
+	// stauts bar
+	Drawstatusbar(*pWind, 0, 5, 5, 50);
+}
+
+
+void Game::MoveForward() {
+	if (BG.gettreey() > pWind->GetHeight()) {
+		BG.settreey(-90);
+	}
+
+	if (En.isout(*pWind)) {
+		cout << "here";
+		En.clearEnemy();
+		En.update(0, 2);
+	}
+
+	BG.settreey(BG.gettreey() + 3);
+	En.moveForward(3);
+	player.movebullets(3);
+	Pause(40);
 }
 
 clicktype Game::getMouseClick(int& x, int& y) const
@@ -110,26 +152,79 @@ window* Game::getWind() const
 	return pWind;
 }
 
-void Game::go() const
+void Game::go()
 {
 	//This function reads the position where the user clicks to determine the desired operation
 	int x, y;
 	bool isExit = false;
 
+	// FROM YOUSSEF
+	pWind->SetBuffering(true);
+	const int window_width = pWind->GetWidth();
+	const int window_height = pWind->GetHeight();
+	const color playerPlaneColor = DARKBLUE;
+	const double size = 0.25;
+	int num_segments = 7;
+	int difficulty = 2;
+	int segment_width = window_width / num_segments;
+	int playerPlaneYCoord = window_height - 100;
+	int playerPlaneXCoord = pWind->GetWidth() / 2;
+	int static_move_y = 0;
+	// END FROM YOUSSEF
+
+
 	//Change the title
 	pWind->ChangeTitle("- - - - - - - - - - River Raid (CIE101-project) - - - - - - - - - -");
-
+	pWind->FlushKeyQueue();
+	keytype keyinput;
 	do
 	{
-		printMessage("Ready...");
-		getMouseClick(x, y);	//Get the coordinates of the user click
+		// FROM YOUSSEF
+		char key;
+		keytype keyinput = pWind->GetKeyPress(key);
+		
+		if (keyinput == ARROW) {
+			if (key == 6) {
+				player.setx(player.getx() + 5);
+			}
+			else if (key == 4) {
+				player.setx(player.getx() - 5);
+			}
+			else if (key == 8) {
+				//Forward
+				BG.settreey(BG.gettreey() + 5);
+			}
+			else if (key == 2) {
+				//Backward
+				BG.settreey(BG.gettreey() + 1);
+				Pause(20);
+			}
+
+		}
+		if (keyinput == ASCII) {
+			ostringstream stream;
+			stream << key;
+			string s = stream.str();
+			cout << s;
+			if (s == " ") {
+				player.firebullet();
+			}
+		}
+
+		DrawGame();
+		MoveForward();
+		pWind->UpdateBuffer();
+		// END FROM YOUSEF
+
+		//printMessage("Ready...");
+		//getMouseClick(x, y);	//Get the coordinates of the user click
 		//if (gameMode == MODE_DSIGN)		//Game is in the Desgin mode
 		//{
 			//[1] If user clicks on the Toolbar
-		if (y >= 0 && y < config.toolBarHeight)
-		{
-			isExit = gameToolbar->handleClick(x, y);
-		}
+		//if (y >= 0 && y < config.toolBarHeight)
+		//{
+			//isExit = gameToolbar->handleClick(x, y);
+	//	}
 		//}
 
 	} while (!isExit);

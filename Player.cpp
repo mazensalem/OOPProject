@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <iostream>
+using namespace std;
 
 Player::Player(int ux, int uy, double usize, color c[]) {
 	/*
@@ -75,4 +77,22 @@ void Player::draw(window& mainwin) const {
 	mainwin.SetPen(pcolor[2], 1);
 	mainwin.SetBrush(pcolor[2]);
 	mainwin.DrawPolygon(x2, y2, 3);
+}
+
+void Player::firebullet() {
+	if (bulletcount != 10) { 
+		bulletcount++;
+	}
+}
+
+void Player::movebullets(int bspeed) {
+	for (int i = 0; i < bulletcount; i++) {
+		bullets[i].sety(bullets[i].gety() - bspeed);
+	}
+}
+
+void Player::drawbullets(window& mainwin) const {
+	for (int i = 0; i < bulletcount; i++) {
+		bullets[i].DrawBullet(mainwin);
+	}
 }

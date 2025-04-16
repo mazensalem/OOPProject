@@ -130,6 +130,13 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="BulletFunctions.cpp" />
+    <ClCompile Include="mahmoud.cpp" />
+    <ClCompile Include="StatusBar.cpp" />
+    <ClCompile Include="OOPYoussefCheckPointTwo.cpp" />
+    <ClCompile Include="DrawBullet.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Background.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMUgraphicsLib\auxil.h">
@@ -205,5 +212,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="StatusBar.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Background.h" />
   </ItemGroup>
 </Project>
