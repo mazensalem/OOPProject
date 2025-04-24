@@ -11,7 +11,7 @@ class Game
 {
 private:
 	window* pWind;	//Pointer to the CMU graphics window
-	Toolbar* gameToolbar;
+	ToolBar T1;
 	Background BG;
 	Enemy En;
 	Fuel F1;
@@ -27,7 +27,7 @@ public:
 
 
 	window* CreateWind(int, int, int, int) const; //creates the game window
-	void createToolbar();
+	//void createToolbar();
 	void clearStatusBar() const;	//Clears the status bar
 
 

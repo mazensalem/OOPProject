@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include "Fuel.h"
+#include "ToolBar.h"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ Game::Game()
 	pWind = CreateWind(config.windWidth, config.windHeight, config.wx, config.wy);
 
 	//2 - create and draw the toolbar
-	createToolbar();
+	//createToolbar();
 
 	//3 - create and draw the backgroundPlayingArea
 	BG.Draw(*pWind, 3, .7);
@@ -66,6 +67,9 @@ void Game::DrawGame() {
 
 	// stauts bar
 	Drawstatusbar(*pWind, 0, 5, 5, 50);
+
+	// Tool bar
+	T1.Draw(*pWind);
 }
 
 
@@ -129,7 +133,7 @@ window* Game::CreateWind(int w, int h, int x, int y) const
 	return pW;
 }
 
-void Game::createToolbar() 
+/*void Game::createToolbar()
 {
 	point toolbarUpperleft;
 	toolbarUpperleft.x = 0;
@@ -138,6 +142,7 @@ void Game::createToolbar()
 	gameToolbar = new Toolbar(this, toolbarUpperleft, 0, config.toolBarHeight);
 	gameToolbar->draw();
 }
+*/
 
 void Game::clearStatusBar() const
 {
