@@ -80,9 +80,11 @@ void Player::draw(window& mainwin) const {
 }
 
 void Player::firebullet() {
-	if (bulletcount != 10) { 
+	if (bulletcount != maxbulletcapacity) { 
 		bulletcount++;
 	}
+	bullets[bulletcount - 1].sety(y);
+	bullets[bulletcount - 1].setx(x + size/2);
 }
 
 void Player::movebullets(int bspeed) {

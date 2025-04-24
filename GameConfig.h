@@ -21,7 +21,10 @@ struct  //contains all game configurations (MAY be loaded from a configuration f
 		statusBarColor = BLACK;	//background color of the status
 	int penWidth = 3;			//width of the pen that draws shapes
 
-	int	iconWidth = 70;			//Width of each icon in toolbar 
+	int	iconWidth = 70;			//Width of each icon in toolbar
+
+	int normalspeed=3, slowspeed=-1, fastspeed=5;
+
 } config;
 
 

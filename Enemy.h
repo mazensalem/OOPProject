@@ -171,7 +171,7 @@ private:
 	Ship ships[10];
 	EnemyHelicopter helis[10];
 	EnemyPlane jets[10];
-	int min_x = 0, min_y = -900, global_max_x = 1200, global_max_y = 0;
+	int min_x = 280, min_y = -900, global_max_x = 920, global_max_y = 0;
 	int min_size = 50, max_size = 300;
 
 	color colors[4] = { BLACK, BLUE, RED, GREENYELLOW };

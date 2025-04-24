@@ -2,8 +2,6 @@
 #include<iostream>
 using namespace std;
 
-
-
 void Tank::draw(window& mainwin) const {
 	mainwin.SetPen(tcolor, 3);
 	mainwin.SetBrush(tcolor);
@@ -262,6 +260,7 @@ void Enemy::view(window& mainwin) const {
 }
 
 void Enemy::update(int nspeed, int nlevel) {
+	min_current_y = 100000;
 	srand(time(0));
 	speed = nspeed;
 	level = nlevel;
@@ -283,7 +282,7 @@ void Enemy::update(int nspeed, int nlevel) {
 		int size = min_size + (rand() % (max_size - min_size - 1));
 		tanks[i].set_size(size);
 
-		int local_max_x = global_max_x - tanks[i].get_size();
+		int local_max_x = global_max_x;
 		int local_max_y = global_max_y - tanks[i].get_size();
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
 		int y = min_y + (rand() % (local_max_y - min_y - 1));
@@ -379,6 +378,7 @@ void Enemy::update(int nspeed, int nlevel) {
 			min_current_y = helis[i].get_y();
 		}
 	}
+
 }
 
 void EnemyPlane::draw(window& w) const {

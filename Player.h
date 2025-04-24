@@ -21,8 +21,8 @@ public:
 
 
 private:
-	int x, y, bulletcount=0;
+	int x, y, bulletcount=0, maxbulletcapacity= 100000;
 	double size;
 	color* pcolor;
-	Bullet bullets[10];
+	Bullet bullets[100000];
 };

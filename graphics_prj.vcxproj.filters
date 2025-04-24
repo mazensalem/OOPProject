@@ -133,6 +133,7 @@
     <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Fuel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMUgraphicsLib\auxil.h">
@@ -211,5 +212,6 @@
     <ClInclude Include="StatusBar.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Fuel.h" />
   </ItemGroup>
 </Project>

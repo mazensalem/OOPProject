@@ -7,10 +7,10 @@
 #include "Background.h"
 #include <iostream>
 #include <sstream>
+#include "Fuel.h"
 
 using namespace std;
 
-Enemy En;
 Game::Game()
 {
 	//1 - Create the main window
@@ -29,6 +29,8 @@ Game::Game()
 
 	//5- Create the Bullet
 	//TODO: Add code to create and draw the Bullet
+	F1.setxrand(280, 920);
+	F1.sety(-90);
 	player.drawbullets(*pWind);
 
 	//6- Create the enemies
@@ -48,12 +50,16 @@ Game::~Game()
 void Game::DrawGame() {
 	// Backgroung
 	BG.Draw(*pWind, 3, .7);
-
-	// Player
-	player.draw(*pWind);
+	
+	// Fuel
+	// The place of the drawing must be changed
+	F1.DrawFuel(*pWind);
 
 	// Bullets
 	player.drawbullets(*pWind);
+
+	// Player
+	player.draw(*pWind);
 
 	// Enemies
 	En.view(*pWind);
@@ -63,21 +69,25 @@ void Game::DrawGame() {
 }
 
 
-void Game::MoveForward() {
+void Game::MoveForward(int speed) {
 	if (BG.gettreey() > pWind->GetHeight()) {
 		BG.settreey(-90);
 	}
 
+	if (F1.gety() > pWind->GetHeight()) {
+		F1.sety(-90);
+		F1.setxrand(280,920);
+	}
+
 	if (En.isout(*pWind)) {
-		cout << "here";
 		En.clearEnemy();
 		En.update(0, 2);
 	}
 
-	BG.settreey(BG.gettreey() + 3);
-	En.moveForward(3);
-	player.movebullets(3);
-	Pause(40);
+	BG.settreey(BG.gettreey() + speed);
+	En.moveForward(speed);
+	player.movebullets(speed);
+	F1.move(speed);
 }
 
 clicktype Game::getMouseClick(int& x, int& y) const
@@ -192,12 +202,12 @@ void Game::go()
 			}
 			else if (key == 8) {
 				//Forward
-				BG.settreey(BG.gettreey() + 5);
+				MoveForward(config.fastspeed);
 			}
 			else if (key == 2) {
 				//Backward
-				BG.settreey(BG.gettreey() + 1);
-				Pause(20);
+				MoveForward(config.slowspeed);
+
 			}
 
 		}
@@ -212,9 +222,10 @@ void Game::go()
 		}
 
 		DrawGame();
-		MoveForward();
+		MoveForward(config.normalspeed);
 		pWind->UpdateBuffer();
 		// END FROM YOUSEF
+		Pause(20);
 
 		//printMessage("Ready...");
 		//getMouseClick(x, y);	//Get the coordinates of the user click
@@ -224,10 +235,9 @@ void Game::go()
 		//if (y >= 0 && y < config.toolBarHeight)
 		//{
 			//isExit = gameToolbar->handleClick(x, y);
-	//	}
+		//}
 		//}
 
 	} while (!isExit);
 }
-
 

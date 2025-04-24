@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Background.h"
 #include "Enemy.h"
+#include "Fuel.h"
 
 class Game
 {
@@ -12,6 +13,8 @@ private:
 	window* pWind;	//Pointer to the CMU graphics window
 	Toolbar* gameToolbar;
 	Background BG;
+	Enemy En;
+	Fuel F1;
 	color pcs[3] = { BLUE, BLACK, BLUE };
 	Player player = { 550, 450, 100, pcs };
 
@@ -35,6 +38,6 @@ public:
 	window* getWind() const;		//returns a pointer to the graphics window
 
 	void DrawGame();
-	void MoveForward();
+	void MoveForward(int speed);
 };
 

@@ -3,7 +3,7 @@
 
 
 void Drawstatusbar(window& w, int points, int gamespeed, int lives, int fuelgauge) {
-	int textheight = config.windHeight - (int)(0.85 * config.statusBarHeight);
+	int textheight = config.windHeight - int(0.85 * config.statusBarHeight);
 	w.SetBrush(BLACK);
 	w.SetPen(BLACK);
 	w.DrawRectangle(0, w.GetHeight()-config.statusBarHeight, w.GetWidth(), w.GetHeight());
