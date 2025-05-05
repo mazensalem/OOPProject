@@ -1,18 +1,13 @@
 #include "Game.h"
-#include "GameConfig.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "StatusBar.h"
-#include "Bullet.h"
-#include "Background.h"
-#include <iostream>
-#include <sstream>
-#include "Fuel.h"
-#include "ToolBar.h"
 
 using namespace std;
 
-Game::Game()
+
+point p = { -1, -1 };
+Game::Game(): 
+	player(this, p, 100, 100),
+	F1(this, p),
+	En(this)
 {
 	//1 - Create the main window
 	pWind = CreateWind(config.windWidth, config.windHeight, config.wx, config.wy);
@@ -26,7 +21,8 @@ Game::Game()
 
 
 	//4- Create the Plane
-	player.draw(*pWind);
+	player.setx(550);
+	player.sety(450);
 
 	//5- Create the Bullet
 	//TODO: Add code to create and draw the Bullet
@@ -54,13 +50,13 @@ void Game::DrawGame() {
 	
 	// Fuel
 	// The place of the drawing must be changed
-	F1.DrawFuel(*pWind);
+	F1.draw();
 
 	// Bullets
 	player.drawbullets(*pWind);
 
 	// Player
-	player.draw(*pWind);
+	player.draw();
 
 	// Enemies
 	En.view(*pWind);

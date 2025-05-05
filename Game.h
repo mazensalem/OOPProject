@@ -6,18 +6,22 @@
 #include "Background.h"
 #include "Enemy.h"
 #include "Fuel.h"
+#include "GameConfig.h"
+#include "StatusBar.h"
+#include <iostream>
+#include <sstream>
+
 
 class Game
 {
 private:
 	window* pWind;	//Pointer to the CMU graphics window
+	point p = { -1, -1 };
 	ToolBar T1;
 	Background BG;
-	Enemy En;
+	EnemyManegar En;
 	Fuel F1;
-	color pcs[3] = { BLUE, BLACK, BLUE };
-	Player player = { 550, 450, 100, pcs };
-
+	Player player;
 public:
 	Game();
 	~Game();

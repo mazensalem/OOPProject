@@ -1,160 +1,106 @@
 #pragma once
 #include "CMUgraphicsLib\CMUgraphics.h"
+#include "GameConfig.h"
+#include "GameObject.h"
 #include <time.h>
+#include <vector>
 
-class Tank
-{
+
+class Enemy: public GameObject {
 public:
-	Tank(int ux=0, int uy=0, double usize=0, color c=BLACK) {
-		/*
-		* ux the position
-		* uy the position
-		* usize the number of pixels for x and y
-		* c is the color
-		*/
-		x = ux;
-		y = uy;
-		size = usize;
-		tcolor = c;
+	Enemy(Game* G, point p, int w, int h, color c) :GameObject(G, p, w, h, c, BLACK){}
+
+	void set_x(int ux) { RefPoint.x = ux; }
+	void set_y(int uy) { RefPoint.y = uy; }
+	void set_size(int usize) { 
+		width =  usize;
+		height = usize;
 	}
-	void draw(window& mainwin) const;
-	
-	void set_x(int ux) { x = ux; }
-	void set_y(int uy) { y = uy; }
-	void set_size(int usize) { size = usize; }
-	void set_color(color ucolor) { tcolor = ucolor; }
+	void set_color(color ucolor) { fillColor = ucolor; }
 
-	double get_size() const { return size; }
-	int get_x() const { return x; }
-	int get_y() const { return y; }
-	color get_color() const { return tcolor; }
-
-private:
-	int x, y;
-	double size;
-	color tcolor;
-};
-
-class Bridge
-{
-public:
-	Bridge(int ux = 0, int uy = 0, double usize = 0, color c = BLACK) {
-		/*
-		* ux the position
-		* uy the position
-		* usize the number of pixels for x and y
-		* c is the color
-		*/
-		x = ux;
-		y = uy;
-		size = usize;
-		bcolor = c;
-	}
-	void draw(window& mainwin) const;
-
-	void set_x(int ux) { x = ux; }
-	void set_y(int uy) { y = uy; }
-	void set_size(int usize) { size = usize; }
-	void set_color(color ucolor) { bcolor = ucolor; }
-
-	double get_size() const { return size; }
-	int get_x() const { return x; }
-	int get_y() const { return y; }
-	color get_color() const { return bcolor; }
-
-private:
-	int x, y;
-	double size;
-	color bcolor;
-
-};
-
-class Ship
-{
-public:
-	Ship(int ux = 0, int uy = 0, double usize = 0, color c = BLACK) {
-		/*
-		* ux the position
-		* uy the position
-		* usize the number of pixels for x and y
-		* c is the color
-		*/
-		scolor = c;
-		x = ux;
-		y = uy;
-		size = usize;
-	}
-	void draw(window& mainwin) const;
-
-	void set_x(int ux) { x = ux; }
-	void set_y(int uy) { y = uy; }
-	void set_size(int usize) { size = usize; }
-	void set_color(color ucolor) { scolor = ucolor; }
-
-	double get_size() const { return size; }
-	int get_x() const { return x; }
-	int get_y() const { return y; }
-	color get_color() const { return scolor; }
-private:
-	color scolor;
-	int x, y;
-	double size;
+	double get_width() const { return width; }
+	double get_height() const { return height; }
+	int get_x() const { return RefPoint.x; }
+	int get_y() const { return RefPoint.y; }
+	color get_color() const { return fillColor; }
+protected:
+	double basewidth=0;
+	double basehieght=0;
 };
 
 
-
-class EnemyPlane {
+class Tank: public Enemy
+{
 public:
-	void draw(window& w) const;
-
-	void set_x(int ux) { x = ux; }
-	void set_y(int uy) { y = uy; }
-	void set_size(int usize) { size = usize; }
-	void set_color(color ucolor) { pcolor = ucolor; }
-
-	double get_size() const { return size; }
-	int get_x() const { return x; }
-	int get_y() const { return y; }
-	color get_color() const { return pcolor; }
+	Tank(Game* G, point p, int w, int h, color c = BLACK) :Enemy(G, p, w, h, c) {
+		basehieght = 500, basewidth = 500;
+	}
+	void draw() const override;
 
 private:
-	int x, y;
-	color pcolor=DARKRED;
+};
+
+class Bridge: public Enemy
+{
+public:
+	Bridge(Game* G, point p, int w, int h, color c = BLACK) :Enemy(G, p, w, h, c) {}
+	void draw() const override;
+
+private:
+};
+
+class Ship: public Enemy
+{
+public:
+	Ship(Game* G, point p, int w, int h, color c = BLACK): Enemy(G, p, w, h, c) {}
+	void draw() const override;
+private:
+};
+
+class EnemyPlane: public Enemy {
+public:
+	EnemyPlane(Game* G, point p, int w, int h, color c = BLACK) : Enemy(G, p, w, h, c) {} 
+	void draw() const override;
+	void moveVertical();
+
+
+private:
+	int verticalspeed = 5;
 	double size = .25;
 };
 
-
-
-class EnemyHelicopter {
+class EnemyHelicopter : public Enemy {
 public:
-	void draw(window& w) const;
+	EnemyHelicopter(Game* G, point p, int w, int h, color c = BLACK) : Enemy(G, p, w, h, c) {}
+	void draw() const override;
+
+	void moveVertical();
 	
-	void set_x(int ux) { x = ux; }
-	void set_y(int uy) { y = uy; }
-	void set_size(int usize) { size = usize; }
-	void set_color(color ucolor) { hcolor = ucolor; }
-
-	double get_size() const { return size; }
-	int get_x() const { return x; }
-	int get_y() const { return y; }
-	color get_color() const { return hcolor; }
-
 private:
-	int x, y;
-	color hcolor=DARKRED;
 	double size=.25;
+	int verticalspeed = 5;
 };
 
 
 
-class Enemy
+class EnemyManegar
 {
 public:
-	void setlevel(int level) { Enemy::level = level; }
-	void setspeed(int speed) { Enemy::speed = speed; }
+	EnemyManegar(Game *G) {
+		game = G;
+	}
+	void setlevel(int level) { EnemyManegar::level = level; }
+	void setspeed(int speed) { EnemyManegar::speed = speed; }
 	void moveForward(int speed);
 
-	void clearEnemy() { tanknum = 0; brigesnum = 0; shipsnum = 0; jetsnum = 0; helisnum = 0; }
+	void clearEnemy() { 
+		tanks.clear();
+		bridges.clear();
+		ships.clear();
+		jets.clear();
+		helis.clear();
+		tanknum = 0; brigesnum = 0; shipsnum = 0; jetsnum = 0; helisnum = 0; 
+	}
 
 	void view(window& mainwin) const;
 	void update(int nspeed, int nlevel);
@@ -164,18 +110,19 @@ public:
 	}
 
 private:
+	Game* game;
 	int level=0, speed=0,
 		tanknum = 0, brigesnum = 0, shipsnum = 0, jetsnum=0, helisnum=0;
-	Tank tanks[10];
-	Bridge bridges[10];
-	Ship ships[10];
-	EnemyHelicopter helis[10];
-	EnemyPlane jets[10];
+	vector<Tank> tanks;
+	vector<Bridge> bridges;
+	vector<Ship> ships;
+	vector<EnemyPlane> jets;
+	vector<EnemyHelicopter> helis;
 	int min_x = 280, min_y = -900, global_max_x = 920, global_max_y = 0;
 	int min_size = 50, max_size = 300;
 
 	color colors[4] = { BLACK, BLUE, RED, GREENYELLOW };
 
 	// This is the hiegts point of all enemys that are on the screen 
-	int min_current_y;
+	int min_current_y = 100000;
 };

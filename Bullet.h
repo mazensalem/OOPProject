@@ -1,21 +1,25 @@
 #pragma once
 #include "CMUgraphicsLib\CMUgraphics.h"
+#include "GameObject.h"
 
-class Bullet
+class Bullet: public GameObject
 {
 public:
-	Bullet(int ux=600, int uy=580) {
-		x = ux;
-		y = uy;
-	}
-	void DrawBullet(window& w) const;
+	Bullet(Game* G, point p);
+	void draw() const override;
 
-	int getx() const { return x; }
-	int gety() const { return y; }
+	int getx() const { return RefPoint.x; }
+	int gety() const { return RefPoint.y; }
 
-	void setx(int ux) { x = ux; }
-	void sety(int uy) { y = uy; }
+	void setx(int ux) { RefPoint.x = ux; }
+	void sety(int uy) { RefPoint.y = uy; }
+	
+	void setbcc(int ind, color c) { bcc[ind] = c; }
+	void setbrc(int ind, color c) { brc[ind] = c; }
+
+
 
 private:
-	int x, y;
+	color bcc[2];
+	color brc[2];
 };

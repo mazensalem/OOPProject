@@ -1,18 +1,19 @@
 #pragma once
 #include "CMUgraphicsLib\CMUgraphics.h"
 #include "Bullet.h"
+#include<vector>
 
-class Player
+class Player: public GameObject
 {
 public:
-	Player(int ux, int uy, double usize, color c[]);
-	void draw(window& mainwin) const;
+	Player(Game* G, point p, int w, int h);
+	void draw() const override;
 
-	void setx(int ux) { x = ux; }
-	void sety(int uy) { y = uy; }
+	void setx(int ux) { RefPoint.x = ux; }
+	void sety(int uy) { RefPoint.y = uy; }
 
-	int getx() const { return x; }
-	int gety() const { return y; }
+	int getx() const { return RefPoint.x; }
+	int gety() const { return RefPoint.y; }
 
 	void firebullet();
 
@@ -21,8 +22,6 @@ public:
 
 
 private:
-	int x, y, bulletcount=0, maxbulletcapacity= 100000;
-	double size;
-	color* pcolor;
-	Bullet bullets[100000];
+	int bulletcount=0, maxbulletcapacity= 100000;
+	vector<Bullet> bullets;
 };

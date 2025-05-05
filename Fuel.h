@@ -1,19 +1,22 @@
 #pragma once
 #include "CMUgraphicsLib\CMUgraphics.h"
+#include "GameObject.h"
 
-class Fuel
+class Fuel: public GameObject
 {
 public:
-	void DrawFuel(window& w) const;
-	void setx(int ux) { x = ux; }
-	void sety(int uy) { y = uy; }
+	Fuel(Game* G, point p): GameObject(G, p, 20, 60, YELLOW, LIGHTYELLOW)  {
 
-	int gety()const { return y; }
+	}
+	void draw() const override;
+	void setx(int ux) { RefPoint.x = ux; }
+	void sety(int uy) { RefPoint.y = uy; }
 
-	void move(int speed) { y += speed; }
+	int gety() const { return RefPoint.y; }
+
+	void move(int speed) { RefPoint.y += speed; }
 
 	void setxrand(int min, int max);
 private:
-	int x, y;
 };
 

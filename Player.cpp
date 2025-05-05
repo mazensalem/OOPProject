@@ -1,21 +1,10 @@
 #include "Player.h"
-#include <iostream>
-using namespace std;
+#include "Game.h"
 
-Player::Player(int ux, int uy, double usize, color c[]) {
-	/*
-	* ux the position
-	* uy the position
-	* usize the number of pixels for x and y
-	* c is the color
-	*/
-	x = ux;
-	y = uy;
-	size = usize;
-	pcolor = c;
-}
 
-void Player::draw(window& mainwin) const {
+Player::Player(Game* G, point p, int w, int h): GameObject(G, p, w, h, BLACK, BLACK) {}
+
+void Player::draw() const {
 	// The total width and height of the original drawing
 	int xtotal = 343, ytotal = 640;
 
@@ -34,57 +23,60 @@ void Player::draw(window& mainwin) const {
 
 	//Resize
 	for (int i = 0; i < 28; i++) {
-		x[i] *= size / xtotal;
-		y[i] *= size / ytotal;
+		x[i] *= (double)width / xtotal;
+		y[i] *= (double)height / ytotal;
 	}
 
 	for (int i = 0; i < 5; i++) {
-		x1[i] *= size / xtotal;
-		y1[i] *= size / ytotal;
+		x1[i] *= (double)width / xtotal;
+		y1[i] *= (double)height / ytotal;
 	}
 
 	for (int i = 0; i < 3; i++) {
-		x2[i] *= size / xtotal;
-		y2[i] *= size / ytotal;
+		x2[i] *= (double)width / xtotal;
+		y2[i] *= (double)height / ytotal;
 	}
 
 	//Shift
 	for (int i = 0; i < 28; i++) {
-		x[i] += Player::x;
-		y[i] += Player::y;
+		x[i] += RefPoint.x;
+		y[i] += RefPoint.y;
 	}
 
 	for (int i = 0; i < 5; i++) {
-		x1[i] += Player::x;
-		y1[i] += Player::y;
+		x1[i] += RefPoint.x;
+		y1[i] += RefPoint.y;
 	}
 
 	for (int i = 0; i < 3; i++) {
-		x2[i] += Player::x;
-		y2[i] += Player::y;
+		x2[i] += RefPoint.x;
+		y2[i] += RefPoint.y;
 	}
 
+	window *mainwin = pGame->getWind();
 
+	mainwin->SetPen(BLACK, 1);
+	mainwin->SetBrush(BLACK);
+	mainwin->DrawPolygon(x, y, 28);
 
-	mainwin.SetPen(pcolor[1], 1);
-	mainwin.SetBrush(pcolor[1]);
-	mainwin.DrawPolygon(x, y, 28);
+	mainwin->SetPen(BLUE, 1);
+	mainwin->SetBrush(BLUE);
+	mainwin->DrawPolygon(x1, y1, 5);
 
-	mainwin.SetPen(pcolor[0], 1);
-	mainwin.SetBrush(pcolor[0]);
-	mainwin.DrawPolygon(x1, y1, 5);
-
-	mainwin.SetPen(pcolor[2], 1);
-	mainwin.SetBrush(pcolor[2]);
-	mainwin.DrawPolygon(x2, y2, 3);
+	mainwin->SetPen(BLUE, 1);
+	mainwin->SetBrush(BLUE);
+	mainwin->DrawPolygon(x2, y2, 3);
 }
 
 void Player::firebullet() {
-	if (bulletcount != maxbulletcapacity) { 
+	//if (bulletcount != maxbulletcapacity) { 
 		bulletcount++;
-	}
-	bullets[bulletcount - 1].sety(y);
-	bullets[bulletcount - 1].setx(x + size/2);
+	//}
+		point p;
+		p.x = (RefPoint.x + width / 2) - 5;
+		p.y = RefPoint.y;
+		Bullet B(pGame, p);
+		bullets.push_back(B);
 }
 
 void Player::movebullets(int bspeed) {
@@ -95,6 +87,6 @@ void Player::movebullets(int bspeed) {
 
 void Player::drawbullets(window& mainwin) const {
 	for (int i = 0; i < bulletcount; i++) {
-		bullets[i].DrawBullet(mainwin);
+		bullets[i].draw();
 	}
 }

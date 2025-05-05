@@ -1,11 +1,11 @@
 #include "Enemy.h"
-#include<iostream>
-using namespace std;
+#include "Game.h"
 
-void Tank::draw(window& mainwin) const {
-	mainwin.SetPen(tcolor, 3);
-	mainwin.SetBrush(tcolor);
-	int xtotal = 500, ytotal = 500;
+void Tank::draw() const {
+	window *mainwin = pGame->getWind();
+	mainwin->SetPen(fillColor, 3);
+	mainwin->SetBrush(fillColor);
+
 	// The main capane thierd layer
 	int x1[] = {220, 240, 350, 370};
 	int y1[] = {195, 145, 145, 195};
@@ -24,81 +24,89 @@ void Tank::draw(window& mainwin) const {
 
 	int x5[] = { 101, 87, 134, 357, 416, 404, 355, 138};
 	int y5[] = { 299, 299, 353, 354, 298, 297, 343, 344 };
-
+	
 	//Resize
 	for (int i = 0; i < 4; i++) {
-		x1[i] *= size / xtotal;
-		y1[i] *= size / ytotal;
-		x2[i] *= size / xtotal;
-		y2[i] *= size / ytotal;
-		x3[i] *= size / xtotal;
-		y3[i] *= size / ytotal;
+		x1[i] *= (double)width / basewidth;
+		y1[i] *= (double)height / basehieght;
+		x2[i] *= (double)width / basewidth;
+		y2[i] *= (double)height / basehieght;
+		x3[i] *= (double)width / basewidth;
+		y3[i] *= (double)height / basehieght;
 	}
+
 	for (int i = 0; i < 6; i++) {
-		x4[i] *= size / xtotal;
-		y4[i] *= size / ytotal;
+		x4[i] *= (double)width / basewidth;
+		y4[i] *= (double)height / basehieght;
 	}
 	for (int i = 0; i < 8; i++) {
-		x5[i] *= size / xtotal;
-		y5[i] *= size / ytotal;
+		x5[i] *= (double)width / basewidth;
+		y5[i] *= (double)height / basehieght;
 	}
 
 	//Shift
 	for (int i = 0; i < 4; i++) {
-		x1[i] += x;
-		y1[i] += y;
-		x2[i] += x;
-		y2[i] += y;
-		x3[i] += x;
-		y3[i] += y;
+		x1[i] += RefPoint.x;
+		y1[i] += RefPoint.y;
+		x2[i] += RefPoint.x;
+		y2[i] += RefPoint.y;
+		x3[i] += RefPoint.x;
+		y3[i] += RefPoint.y;
 	}
 	for (int i = 0; i < 6; i++) {
-		x4[i] += x;
-		y4[i] += y;
+		x4[i] += RefPoint.x;
+		y4[i] += RefPoint.y;
 	}
 	for (int i = 0; i < 8; i++) {
-		x5[i] += x;
-		y5[i] += y;
+		x5[i] += RefPoint.x;
+		y5[i] += RefPoint.y;
 	}
 
 
-	mainwin.DrawPolygon(x4, y4, 6);
+	mainwin->DrawPolygon(x4, y4, 6);
 
-	mainwin.DrawPolygon(x3, y3, 4);
+	mainwin->DrawPolygon(x3, y3, 4);
 	
-	mainwin.DrawPolygon(x1, y1, 4);
+	mainwin->DrawPolygon(x1, y1, 4);
 
-	mainwin.DrawPolygon(x2, y2, 4);
+	mainwin->DrawPolygon(x2, y2, 4);
 
 	// The canon the short part
-	mainwin.DrawRectangle(
-		(120 * size / xtotal) + x,
-		(177 * size / ytotal) + y,
-		(156 * size / xtotal) + x,
-		(156 * size / ytotal) + y
+	int x = RefPoint.x, y=RefPoint.y;
+	mainwin->DrawRectangle(
+		(120 * width / basewidth) + x,
+		(177 * height / basehieght) + y,
+		(156 * width/ basewidth) + x,
+		(156 * height / basehieght) + y
 			);
 
 	// The wheel frame
-	mainwin.DrawPolygon(x5, y5, 8);
+	mainwin->DrawPolygon(x5, y5, 8);
 
 	// The wheels
-	mainwin.DrawCircle(
-		155 * size / xtotal + x,
-		300 * size / ytotal + y,
-		27 * size / xtotal);
+	double r = sqrt(width*width + height*height);
+	mainwin->DrawCircle(
+		155 * width / basewidth + x,
+		300 * height / basehieght + y,
+		27 * r / basewidth);
 
-	mainwin.DrawCircle(
-		249 * size / xtotal + x, 300 * size / ytotal + y, 27 * size / xtotal);
+	mainwin->DrawCircle(
+		249 * width / basewidth + x, 
+		300 * height / basehieght + y, 
+		27 * r / basewidth);
 
-	mainwin.DrawCircle(343 * size / xtotal + x, 300 * size / ytotal + y, 27 * size / xtotal);
+	mainwin->DrawCircle(
+		343 * width / basewidth + x, 
+		300 * height / basehieght + y, 
+		27 * r / basewidth);
 }
 
 
-void Bridge::draw(window& mainwin) const {
-	mainwin.SetPen(bcolor, 3);
-	mainwin.SetBrush(bcolor);
+void Bridge::draw() const {
+	window* mainwin = pGame->getWind();
+	mainwin->SetPen(fillColor, 3);
+	mainwin->SetBrush(fillColor);
 	int xtotal = 500, ytotal=500;
-
 
 	// The lower part
 	int x1[] = { 35, 35,460,460 };
@@ -115,26 +123,26 @@ void Bridge::draw(window& mainwin) const {
 
 
 
-
-
 	//Resize
+	double sizey = height;
 	for (int i = 0; i < 4; i++) {
-		x1[i] *= size / xtotal;
-		y1[i] *= size / ytotal;
+		x1[i] *= (double)width / xtotal;
+		y1[i] *= sizey / ytotal;
 	}
 
 	for (int i = 0; i < 8; i++) {
-		x2[i] *= size / xtotal;
-		y2[i] *= size / ytotal;
+		x2[i] *= (double)width / xtotal;
+		y2[i] *= sizey / ytotal;
 	}
 	for (int i = 0; i < 5; i++) {
-		lxs[i] *= size / xtotal;
+		lxs[i] *= (double)width / xtotal;
 	}
-	lys[0] *= size / ytotal;
-	lys[1] *= size / ytotal;
+	lys[0] *= sizey / ytotal;
+	lys[1] *= sizey / ytotal;
 
 
 	//Shift
+	int x = RefPoint.x, y = RefPoint.y;
 	for (int i = 0; i < 4; i++) {
 		x1[i] += x;
 		y1[i] += y;
@@ -150,24 +158,25 @@ void Bridge::draw(window& mainwin) const {
 	lys[1] += y;
 
 
-	mainwin.DrawPolygon(x1, y1, 4);
-	mainwin.DrawPolygon(x2, y2, 8);
+	mainwin->DrawPolygon(x1, y1, 4);
+	mainwin->DrawPolygon(x2, y2, 8);
 
 	// Connect the lines points
 	for (int i = 0; i < 4; i++) {
-		mainwin.DrawLine(lxs[i], lys[0], lxs[i], lys[1]);
+		mainwin->DrawLine(lxs[i], lys[0], lxs[i], lys[1]);
 
-		mainwin.DrawLine(lxs[i], lys[((i%2==0) ? 0  : 1)], lxs[i+1], lys[((i % 2 == 0) ? 1 : 0)]);
+		mainwin->DrawLine(lxs[i], lys[((i%2==0) ? 0  : 1)], lxs[i+1], lys[((i % 2 == 0) ? 1 : 0)]);
 
 	}
-	mainwin.DrawLine(lxs[4], lys[0], lxs[4], lys[1]);
+	mainwin->DrawLine(lxs[4], lys[0], lxs[4], lys[1]);
 
 }
 
 
-void Ship::draw(window& mainwin) const {
-	mainwin.SetPen(scolor, 3);
-	mainwin.SetBrush(scolor);
+void Ship::draw() const {
+	window* mainwin = pGame->getWind();
+	mainwin->SetPen(fillColor, 3);
+	mainwin->SetBrush(fillColor);
 	int xtotal = 500, ytotal = 251, 
 		rtotal=sqrt(pow(xtotal, 2) + pow(ytotal, 2));
 	// The main body
@@ -176,24 +185,39 @@ void Ship::draw(window& mainwin) const {
 	
 	// Resize
 	for (int i = 0; i < 19; i++) {
-		x1[i] *= size / xtotal;
-		y1[i] *= size / ytotal;
+		x1[i] *= (double)width / xtotal;
+		y1[i] *= (double)height / ytotal;
 	}
 	
 	// Shift
 	for (int i = 0; i < 19; i++) {
-		x1[i] += x;
-		y1[i] += y;
+		x1[i] += RefPoint.x;
+		y1[i] += RefPoint.y;
 	}
 	
-	mainwin.DrawPolygon(x1, y1, 19);
+	mainwin->DrawPolygon(x1, y1, 19);
 
 	// The two wepans
-	mainwin.DrawCircle(125 * size/ xtotal + x, 140 * size / ytotal + y, 15 * size / rtotal);
-	mainwin.DrawCircle(380 * size / xtotal + x, 145 * size / ytotal + y, 15 * size / rtotal);
+	int x = RefPoint.x, y = RefPoint.y, r = sqrt(width*width + height*height);
+	mainwin->DrawCircle(
+		125 * (double)width/ xtotal + x, 
+		140 * (double)height / ytotal + y, 
+		15 * (double)r / rtotal);
+	mainwin->DrawCircle(
+		380 * (double)width / xtotal + x,
+		145 * (double)height / ytotal + y,
+		15 * (double)r / rtotal);
 
-	mainwin.DrawLine(385 * size / xtotal + x, 140 * size / ytotal + y, 420 * size / xtotal + x, 115 * size / ytotal + y);
-	mainwin.DrawLine(120 * size / xtotal + x, 135 * size / ytotal + y, 85 * size / xtotal + x, 115 * size / ytotal + y);
+	mainwin->DrawLine(
+		385 * (double)width / xtotal + x, 
+		140 * (double)height / ytotal + y, 
+		420 * (double)width / xtotal + x, 
+		115 * (double)height / ytotal + y);
+	mainwin->DrawLine(
+		120 * (double)width / xtotal + x, 
+		135 * (double)height / ytotal + y, 
+		85 * (double)width / xtotal + x,
+		115 * (double)height / ytotal + y);
 
 
 	// The satalite with its base
@@ -202,8 +226,8 @@ void Ship::draw(window& mainwin) const {
 
 	// Resize
 	for (int i = 0; i < 6; i++) {
-		x2[i] *= size / xtotal;
-		y2[i] *= size / ytotal;
+		x2[i] *= (double)width / xtotal;
+		y2[i] *= (double)height / ytotal;
 	}
 	// Shift
 	for (int i = 0; i < 6; i++) {
@@ -211,55 +235,73 @@ void Ship::draw(window& mainwin) const {
 		y2[i] += y;
 	}
 
-	mainwin.DrawPolygon(x2, y2, 6);
+	mainwin->DrawPolygon(x2, y2, 6);
 
-	mainwin.DrawTriangle(195 * size / xtotal + x, 85 * size / ytotal + y, 205 * size / xtotal + x, 50 * size / ytotal + y, 210 * size / xtotal + x, 85 * size / ytotal + y, FRAME);
+	mainwin->DrawTriangle(
+		195 * (double)width / xtotal + x, 
+		85 * (double)height / ytotal + y,
+		205 * (double)width / xtotal + x,
+		50 * (double)height / ytotal + y,
+		210 * (double)width / xtotal + x,
+		85 * (double)height / ytotal + y, FRAME);
 
-	mainwin.DrawArc(200 * size / xtotal + x, 10 * size / ytotal + y, 240 * size / xtotal + x, 60 * size / ytotal + y, 180, 270);
-	mainwin.DrawLine(200 * size / xtotal + x, 30 * size / ytotal + y, 225 * size / xtotal + x, 60 * size / ytotal + y);
+	mainwin->DrawArc(
+		200 * (double)width / xtotal + x,
+		10 * (double)height/ ytotal + y,
+		240 * (double)width / xtotal + x,
+		60 * (double)height / ytotal + y,
+		180, 270);
+	mainwin->DrawLine(
+		200 * (double)width / xtotal + x,
+		30 * (double)height / ytotal + y,
+		225 * (double)width / xtotal + x,
+		60 * (double)height / ytotal + y);
 }
 
-void Enemy::moveForward(int speed) {
+void EnemyManegar::moveForward(int speed) {
 	min_current_y += speed;
-	for (int i = 0; i < tanknum; i++) {
+	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].set_y(tanks[i].get_y() + speed);
 	}
-	for (int i = 0; i < brigesnum; i++) {
+	for (int i = 0; i < bridges.size(); i++) {
 		bridges[i].set_y(bridges[i].get_y() + speed);
 	}
-	for (int i = 0; i < shipsnum; i++) {
+	for (int i = 0; i < ships.size(); i++) {
 		ships[i].set_y(ships[i].get_y() + speed);
 	}
 
-	for (int i = 0; i < jetsnum; i++) {
+	for (int i = 0; i < jets.size(); i++) {
 		jets[i].set_y(jets[i].get_y() + speed);
+		jets[i].moveVertical();
+
 	}
-	for (int i = 0; i < helisnum; i++) {
+	for (int i = 0; i < helis.size(); i++) {
 		helis[i].set_y(helis[i].get_y() + speed);
+		helis[i].moveVertical();
 	}
 }
 
-void Enemy::view(window& mainwin) const {
+void EnemyManegar::view(window& mainwin) const {
 	// View the tanks then briges then ships
-	for (int i = 0; i < tanknum; i++) {
-		tanks[i].draw(mainwin);
+	for (int i = 0; i < tanks.size(); i++) {
+		tanks[i].draw();
 	}
-	for (int i = 0; i < brigesnum; i++) {
-		bridges[i].draw(mainwin);
+	for (int i = 0; i < bridges.size(); i++) {
+		bridges[i].draw();
 	}
-	for (int i = 0; i < shipsnum; i++) {
-		ships[i].draw(mainwin);
+	for (int i = 0; i < ships.size(); i++) {
+		ships[i].draw();
 	}
 
-	for (int i = 0; i < jetsnum; i++) {
-		jets[i].draw(mainwin);
+	for (int i = 0; i < jets.size(); i++) {
+		jets[i].draw();
 	}
-	for (int i = 0; i < helisnum; i++) {
-		helis[i].draw(mainwin);
+	for (int i = 0; i < helis.size(); i++) {
+		helis[i].draw();
 	}
 }
 
-void Enemy::update(int nspeed, int nlevel) {
+void EnemyManegar::update(int nspeed, int nlevel) {
 	min_current_y = 100000;
 	srand(time(0));
 	speed = nspeed;
@@ -278,140 +320,196 @@ void Enemy::update(int nspeed, int nlevel) {
 
 	// Generates a randome size and x and y and color based on the conditions set for each object
 	// notice i from otanknum to tanknum so that it would change the add ones only
-	for (int i = otanknum; i < tanknum; i++) {
+	for (int i = 0; i < tanknum; i++) {
+		point p{ 0,0 };
+		tanks.push_back(Tank(game, p, 0, 0));
+
 		int size = min_size + (rand() % (max_size - min_size - 1));
-		tanks[i].set_size(size);
+		tanks.back().set_size(size);
 
 		int local_max_x = global_max_x;
-		int local_max_y = global_max_y - tanks[i].get_size();
+		int local_max_y = global_max_y - tanks.back().get_height();
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
 		int y = min_y + (rand() % (local_max_y - min_y - 1));
 
-		tanks[i].set_x(x);
-		tanks[i].set_y(y);
+		tanks.back().set_x(x);
+		tanks.back().set_y(y);
 
 		int colori = floor(rand() % 4);
-		tanks[i].set_color(colors[colori]);
+		tanks.back().set_color(colors[colori]);
 
 		// Getting the value of the highest point in all enemyies
-		if (tanks[i].get_y() < min_current_y) {
-			min_current_y = tanks[i].get_y();
+		if (tanks.back().get_y() < min_current_y) {
+			min_current_y = tanks.back().get_y();
+		}
+	}
+
+	for (int i = 0; i < brigesnum; i++) {
+		point p{ 0,0 };
+		int size = global_max_x - min_x;
+		bridges.push_back(
+			Bridge(game, p, size, .4 * (size))
+		);
+
+		int local_max_y = global_max_y - bridges.back().get_height();
+		int x = min_x;
+		int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		bridges.back().set_x(x);
+		bridges.back().set_y(y);
+
+		int colori = floor(rand() % 4);
+		bridges.back().set_color(colors[colori]);
+		// Getting the value of the highest point in all enemyies
+		if (bridges.back().get_y() < min_current_y) {
+			min_current_y = bridges.back().get_y();
 		}
 	}
 	
-	for (int i = obrigesum; i < brigesnum; i++) {
+	for (int i = 0; i < shipsnum; i++) {
+		point p{ 0,0 };
+		ships.push_back(
+			Ship(game, p, 0, 0)
+		);
+		
 		int size = min_size + (rand() % (max_size - min_size + 1));
-		bridges[i].set_size(size);
+		ships.back().set_size(size);
 
-		int local_max_x = global_max_x - bridges[i].get_size();
-		int local_max_y = global_max_y - bridges[i].get_size();
+		int local_max_x = global_max_x - ships.back().get_width();
+		int local_max_y = global_max_y - ships.back().get_height();
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
 		int y = min_y + (rand() % (local_max_y - min_y - 1));
 
-		bridges[i].set_x(x);
-		bridges[i].set_y(y);
-
-		int colori = floor(rand() % 4);
-		bridges[i].set_color(colors[colori]);
-		// Getting the value of the highest point in all enemyies
-		if (bridges[i].get_y() < min_current_y) {
-			min_current_y = bridges[i].get_y();
-		}
-	}
-	
-	for (int i = oshipsnum; i < shipsnum; i++) {
-		int size = min_size + (rand() % (max_size - min_size + 1));
-		ships[i].set_size(size);
-
-		int local_max_x = global_max_x - ships[i].get_size();
-		int local_max_y = global_max_y - ships[i].get_size();
-		int x = min_x + (rand() % (local_max_x - min_x - 1));
-		int y = min_y + (rand() % (local_max_y - min_y - 1));
-
-		ships[i].set_x(x);
-		ships[i].set_y(y);
+		ships.back().set_x(x);
+		ships.back().set_y(y);
 
 		int colori = floor(rand()%4);
-		ships[i].set_color(colors[colori]);
+		ships.back().set_color(colors[colori]);
 		// Getting the value of the highest point in all enemyies
-		if (ships[i].get_y() < min_current_y) {
-			min_current_y = ships[i].get_y();
+		if (ships.back().get_y() < min_current_y) {
+			min_current_y = ships.back().get_y();
 		}
 	}
 	
-	for (int i = ojetsnum; i < jetsnum; i++) {
+	for (int i = 0; i < jetsnum; i++) {
 		//int size = min_size + (rand() % (max_size - min_size + 1));
 		//jets[i].set_size(size);
+		point p{ 0,0 };
+		jets.push_back(
+			EnemyPlane(game, p, 0, 0)
+		);
 
-		int local_max_x = global_max_x - jets[i].get_size();
-		int local_max_y = global_max_y - jets[i].get_size();
-		int x = min_x + (rand() % (local_max_x - min_x - 1));
+		int local_max_x = -400;
+		int local_max_y = global_max_y - jets.back().get_height();
+		int x = -100;
 		int y = min_y + (rand() % (local_max_y - min_y - 1));
 
-		jets[i].set_x(x);
-		jets[i].set_y(y);
+		jets.back().set_x(x);
+		jets.back().set_y(y);
 
 		int colori = floor(rand() % 4);
-		jets[i].set_color(colors[colori]);
+		jets.back().set_color(colors[colori]);
 		// Getting the value of the highest point in all enemyies
-		if (jets[i].get_y() < min_current_y) {
-			min_current_y = jets[i].get_y();
+		if (jets.back().get_y() < min_current_y) {
+			min_current_y = jets.back().get_y();
 		}
 	}
 
-	for (int i = ohelisnum; i < helisnum; i++) {
+	for (int i = 0; i < helisnum; i++) {
 		//int size = min_size + (rand() % (max_size - min_size + 1));
 		//helis[i].set_size(size);
+		point p{ 0,0 };
+		helis.push_back(
+			EnemyHelicopter(game, p, 0, 0)
+		);
 
-		int local_max_x = global_max_x - helis[i].get_size();
-		int local_max_y = global_max_y - helis[i].get_size();
+
+		int local_max_x = global_max_x - helis.back().get_width();
+		int local_max_y = global_max_y - helis.back().get_height();
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
 		int y = min_y + (rand() % (local_max_y - min_y - 1));
 
-		helis[i].set_x(x);
-		helis[i].set_y(y);
+		helis.back().set_x(x);
+		helis.back().set_y(y);
 
 		int colori = floor(rand() % 4);
-		helis[i].set_color(colors[colori]);
+		helis.back().set_color(colors[colori]);
 		// Getting the value of the highest point in all enemyies
-		if (helis[i].get_y() < min_current_y) {
-			min_current_y = helis[i].get_y();
+		if (helis.back().get_y() < min_current_y) {
+			min_current_y = helis.back().get_y();
 		}
 	}
 
 }
 
-void EnemyPlane::draw(window& w) const {
-	w.SetPen(BLACK);
-	w.SetBrush(pcolor);
+void EnemyPlane::draw() const {
+	window *w = pGame->getWind();
+	w->SetPen(BLACK);
+	w->SetBrush(fillColor);
 	int width = 50 * size;
 	int height = 190 * size;
-	w.DrawRectangle(x, y - height, x + width, y);
-	int x1[] = { x, x - 100 * size, x - 100 * size, x };
-	int y1[] = { y - 20 * size, y - 40 * size, y - 100 * size, y - 80 * size };
-	w.DrawPolygon(x1, y1, 4, FILLED);
-	int x2[] = { x + (width - 1), x + (width - 1), x + (width + 100 * size - 1), x + (width + 100 * size - 1) };
-	int y2[] = { y - 20 * size, y - 80 * size, y - 100 * size, y - 40 * size };
-	w.DrawPolygon(x2, y2, 4, FILLED);
-	int x3[] = { x, x - 50 * size, x - 50 * size, x };
-	int y3[] = { y - height + 50 * size, y - height + 30 * size, y - height - 20 * size, y - height };
-	w.DrawPolygon(x3, y3, 4, FILLED);
-	int x4[] = { x + (width - 1), x + (width - 1), x + (width + 50 * size - 1), x + (width + 50 * size - 1) };
-	int y4[] = { y - height + 50 * size, y - height, y - height - 20 * size, y - height + 30 * size };
-	w.DrawPolygon(x4, y4, 4, FILLED);
+	int x = RefPoint.x, y = RefPoint.y;
+	w->DrawRectangle(x-height, y - width, x, y);
+	int x1[] = { x - 20 * size, x - 40 * size, x - 100 * size, x - 80 * size };
+	int y1[] = { y, y + 100 * size, y + 100 * size, y };
+	w->DrawPolygon(x1, y1, 4, FILLED);
+	int x2[] = { x - 20 * size,
+	x - 80 * size,
+	x - 100 * size,
+	x - 40 * size };
+	int y2[] = { y - (width - 1),
+	y - (width - 1),
+	y - (width + 100 * size - 1),
+	y - (width + 100 * size - 1) };
+	w->DrawPolygon(x2, y2, 4, FILLED);
+	int x3[] = { x - height + 50 * size,
+	x - height + 30 * size,
+	x - height - 20 * size,
+	x - height };
+	int y3[] = { y,
+	y + 50 * size,
+	y + 50 * size,
+	y };
+	w->DrawPolygon(x3, y3, 4, FILLED);
+	int x4[] = { x - height + 50 * size,
+	x - height,
+	x - height - 20 * size,
+	x - height + 30 * size };
+	int y4[] = { y - (width - 1),
+	y - (width - 1),
+	y - (width + 50 * size - 1),
+	y - (width + 50 * size - 1) };
+	w->DrawPolygon(x4, y4, 4, FILLED);
 }
 
-void EnemyHelicopter::draw(window& w) const {
-	w.SetPen(BLACK);
-	w.SetBrush(ORANGE);
-	w.DrawRectangle(x - 80 * size, y - 70 * size, x + 80 * size, y - (70 - 20) * size);
-	w.DrawRectangle(x - 10 * size, y - 80 * size, x + 10 * size, y + 80 * size);
-	w.SetBrush(BLACK);
-	w.DrawRectangle(x - 150 * size, y + 10 * size, x + 70 * size, y - 10 * size);
-	w.DrawRectangle(x - 140 * size, y - 20 * size, x - 130 * size, y + 20 * size);
-	w.DrawRectangle(x - 40 * size, y + 60 * size, x + 40 * size, y + 80 * size);
-	w.SetPen(BLACK);
-	w.SetBrush(hcolor);
-	w.DrawCircle(x, y, 50 * size);
+void EnemyPlane::moveVertical()
+{
+	if (get_y() > 0)
+		set_x(get_x() + verticalspeed);
+}
+
+void EnemyHelicopter::draw() const {
+	window* w = pGame->getWind();
+	int x = RefPoint.x, y = RefPoint.y;
+	w->SetPen(BLACK);
+	w->SetBrush(ORANGE);
+	w->DrawRectangle(x - 80 * size, y - 70 * size, x + 80 * size, y - (70 - 20) * size);
+	w->DrawRectangle(x - 10 * size, y - 80 * size, x + 10 * size, y + 80 * size);
+	w->SetBrush(BLACK);
+	w->DrawRectangle(x - 150 * size, y + 10 * size, x + 70 * size, y - 10 * size);
+	w->DrawRectangle(x - 140 * size, y - 20 * size, x - 130 * size, y + 20 * size);
+	w->DrawRectangle(x - 40 * size, y + 60 * size, x + 40 * size, y + 80 * size);
+	w->SetPen(BLACK);
+	w->SetBrush(fillColor);
+	w->DrawCircle(x, y, 50 * size);
+}
+
+void EnemyHelicopter::moveVertical() {
+	if (get_y() >= 0) {
+		set_x(get_x() + verticalspeed);
+		if (get_x() > config.endRiver || get_x() < config.startRiver) {
+			verticalspeed = -verticalspeed;
+		}
+	}
 }
 

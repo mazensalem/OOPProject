@@ -24,6 +24,7 @@ struct  //contains all game configurations (MAY be loaded from a configuration f
 	int	iconWidth = 70;			//Width of each icon in toolbar
 
 	int normalspeed=3, slowspeed=-1, fastspeed=5;
+	int startRiver= 280, endRiver= 920;
 
 } config;
 
