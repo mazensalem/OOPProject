@@ -22,3 +22,7 @@ void Fuel::setxrand(int min, int max)
 	RefPoint.x = min + rand() % (max - min - 1);
 }
 
+void Fuel::collisionAction(GameObject* other)
+{
+}
+

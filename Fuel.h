@@ -17,6 +17,8 @@ public:
 	void move(int speed) { RefPoint.y += speed; }
 
 	void setxrand(int min, int max);
+
+	void collisionAction(GameObject* other) override;
 private:
 };
 

@@ -10,6 +10,7 @@
 #include "StatusBar.h"
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 
 class Game
@@ -19,9 +20,11 @@ private:
 	point p = { -1, -1 };
 	ToolBar T1;
 	Background BG;
-	EnemyManegar En;
+	EnemyManeger En;
 	Fuel F1;
 	Player player;
+	vector<GameObject*> objs;
+
 public:
 	Game();
 	~Game();
@@ -43,5 +46,6 @@ public:
 
 	void DrawGame();
 	void MoveForward(int speed);
+	void updateobjs();
 };
 

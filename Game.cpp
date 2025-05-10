@@ -28,7 +28,7 @@ Game::Game():
 	//TODO: Add code to create and draw the Bullet
 	F1.setxrand(280, 920);
 	F1.sety(-90);
-	player.drawbullets(*pWind);
+	player.drawbullets();
 
 	//6- Create the enemies
 	//TODO: Add code to create and draw enemies in random places
@@ -37,6 +37,7 @@ Game::Game():
 	//7- Create and clear the status bar
 	Drawstatusbar(*pWind, 0, 5, 5, 50);
 	// clearStatusBar();
+	updateobjs();
 }
 
 Game::~Game()
@@ -53,7 +54,7 @@ void Game::DrawGame() {
 	F1.draw();
 
 	// Bullets
-	player.drawbullets(*pWind);
+	player.drawbullets();
 
 	// Player
 	player.draw();
@@ -77,17 +78,35 @@ void Game::MoveForward(int speed) {
 	if (F1.gety() > pWind->GetHeight()) {
 		F1.sety(-90);
 		F1.setxrand(280,920);
+		updateobjs();
 	}
 
 	if (En.isout(*pWind)) {
 		En.clearEnemy();
 		En.update(0, 2);
+		updateobjs();
 	}
 
 	BG.settreey(BG.gettreey() + speed);
 	En.moveForward(speed);
 	player.movebullets(speed);
 	F1.move(speed);
+}
+
+void Game::updateobjs()
+{
+	objs.clear();
+	objs.push_back(&F1);
+	objs.push_back(&player);
+	for (int i = 0; i < player.getBulletCount(); i++) {
+		objs.push_back(
+			&(*player.getBulletsPtr())[i]
+		);
+	}
+	for (int i = 0; i < En.getAllEnemies().size(); i++) {
+		Enemy* E = const_cast<Enemy*>(En.getAllEnemies()[i]);
+		objs.push_back(E);
+	}
 }
 
 clicktype Game::getMouseClick(int& x, int& y) const
@@ -224,8 +243,20 @@ void Game::go()
 
 		DrawGame();
 		MoveForward(config.normalspeed);
-		pWind->UpdateBuffer();
 		// END FROM YOUSEF
+
+		for (int i = 0; i < objs.size(); i++) {
+			for (int j = 0; j < objs.size() && i != j; j++) {
+				
+				if (objs[i]->CollisionDetection(*objs[j])) {
+					objs[i]->collisionAction(objs[j]);
+					objs[j]->collisionAction(objs[i]);
+				}
+				
+			}
+		}
+
+		pWind->UpdateBuffer();
 		Pause(20);
 
 		//printMessage("Ready...");

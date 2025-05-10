@@ -258,7 +258,7 @@ void Ship::draw() const {
 		60 * (double)height / ytotal + y);
 }
 
-void EnemyManegar::moveForward(int speed) {
+void EnemyManeger::moveForward(int speed) {
 	min_current_y += speed;
 	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].set_y(tanks[i].get_y() + speed);
@@ -281,7 +281,7 @@ void EnemyManegar::moveForward(int speed) {
 	}
 }
 
-void EnemyManegar::view(window& mainwin) const {
+void EnemyManeger::view(window& mainwin) const {
 	// View the tanks then briges then ships
 	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].draw();
@@ -301,95 +301,31 @@ void EnemyManegar::view(window& mainwin) const {
 	}
 }
 
-void EnemyManegar::update(int nspeed, int nlevel) {
+void EnemyManeger::update(int nspeed, int nlevel) {
+	cout << "here";
 	min_current_y = 100000;
 	srand(time(0));
 	speed = nspeed;
 	level = nlevel;
-	int otanknum = tanknum,
-		obrigesum = brigesnum,
-		oshipsnum = shipsnum,
-		ojetsnum = jetsnum,
-		ohelisnum = helisnum;
 	// This formale needs to be changed
-	tanknum = level + speed;
-	brigesnum = level + speed;
-	shipsnum = level + speed;
-	jetsnum = level + speed;
-	helisnum = level + speed;
+	tanknum = 2;
+	brigesnum = 2;
+	shipsnum = 2;
+	jetsnum = 2;
+	helisnum = 2;
+
+	vector<int> yvalues = {
+		-900,
+		-772,
+		-644,
+		-516,
+		-388,
+		-260,
+		-132,
+	};
 
 	// Generates a randome size and x and y and color based on the conditions set for each object
 	// notice i from otanknum to tanknum so that it would change the add ones only
-	for (int i = 0; i < tanknum; i++) {
-		point p{ 0,0 };
-		tanks.push_back(Tank(game, p, 0, 0));
-
-		int size = min_size + (rand() % (max_size - min_size - 1));
-		tanks.back().set_size(size);
-
-		int local_max_x = global_max_x;
-		int local_max_y = global_max_y - tanks.back().get_height();
-		int x = min_x + (rand() % (local_max_x - min_x - 1));
-		int y = min_y + (rand() % (local_max_y - min_y - 1));
-
-		tanks.back().set_x(x);
-		tanks.back().set_y(y);
-
-		int colori = floor(rand() % 4);
-		tanks.back().set_color(colors[colori]);
-
-		// Getting the value of the highest point in all enemyies
-		if (tanks.back().get_y() < min_current_y) {
-			min_current_y = tanks.back().get_y();
-		}
-	}
-
-	for (int i = 0; i < brigesnum; i++) {
-		point p{ 0,0 };
-		int size = global_max_x - min_x;
-		bridges.push_back(
-			Bridge(game, p, size, .4 * (size))
-		);
-
-		int local_max_y = global_max_y - bridges.back().get_height();
-		int x = min_x;
-		int y = min_y + (rand() % (local_max_y - min_y - 1));
-
-		bridges.back().set_x(x);
-		bridges.back().set_y(y);
-
-		int colori = floor(rand() % 4);
-		bridges.back().set_color(colors[colori]);
-		// Getting the value of the highest point in all enemyies
-		if (bridges.back().get_y() < min_current_y) {
-			min_current_y = bridges.back().get_y();
-		}
-	}
-	
-	for (int i = 0; i < shipsnum; i++) {
-		point p{ 0,0 };
-		ships.push_back(
-			Ship(game, p, 0, 0)
-		);
-		
-		int size = min_size + (rand() % (max_size - min_size + 1));
-		ships.back().set_size(size);
-
-		int local_max_x = global_max_x - ships.back().get_width();
-		int local_max_y = global_max_y - ships.back().get_height();
-		int x = min_x + (rand() % (local_max_x - min_x - 1));
-		int y = min_y + (rand() % (local_max_y - min_y - 1));
-
-		ships.back().set_x(x);
-		ships.back().set_y(y);
-
-		int colori = floor(rand()%4);
-		ships.back().set_color(colors[colori]);
-		// Getting the value of the highest point in all enemyies
-		if (ships.back().get_y() < min_current_y) {
-			min_current_y = ships.back().get_y();
-		}
-	}
 	
 	for (int i = 0; i < jetsnum; i++) {
 		//int size = min_size + (rand() % (max_size - min_size + 1));
@@ -402,7 +338,12 @@ void EnemyManegar::update(int nspeed, int nlevel) {
 		int local_max_x = -400;
 		int local_max_y = global_max_y - jets.back().get_height();
 		int x = -100;
-		int y = min_y + (rand() % (local_max_y - min_y - 1));
+		// int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		if (!yvalues.size()) continue;
+		int yindex = floor(rand() % yvalues.size());
+		int y = yvalues[yindex];
+		yvalues.erase(yvalues.begin() + yindex);
 
 		jets.back().set_x(x);
 		jets.back().set_y(y);
@@ -414,6 +355,7 @@ void EnemyManegar::update(int nspeed, int nlevel) {
 			min_current_y = jets.back().get_y();
 		}
 	}
+	
 
 	for (int i = 0; i < helisnum; i++) {
 		//int size = min_size + (rand() % (max_size - min_size + 1));
@@ -427,7 +369,12 @@ void EnemyManegar::update(int nspeed, int nlevel) {
 		int local_max_x = global_max_x - helis.back().get_width();
 		int local_max_y = global_max_y - helis.back().get_height();
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
-		int y = min_y + (rand() % (local_max_y - min_y - 1));
+		// int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		if (!yvalues.size()) continue;
+		int yindex = floor(rand() % yvalues.size());
+		int y = yvalues[yindex];
+		yvalues.erase(yvalues.begin() + yindex);
 
 		helis.back().set_x(x);
 		helis.back().set_y(y);
@@ -439,8 +386,131 @@ void EnemyManegar::update(int nspeed, int nlevel) {
 			min_current_y = helis.back().get_y();
 		}
 	}
+	
+	for (int i = 0; i < brigesnum; i++) {
+		point p{ 0,0 };
+		int size = global_max_x - min_x;
+		if (!yvalues.size()) continue;
+		bridges.push_back(
+			Bridge(game, p, size, .4 * (size))
+		);
+
+		int local_max_y = global_max_y - bridges.back().get_height();
+		int x = min_x;
+		// int y = min_y + (rand() % (local_max_y - min_y - 1));
+		int yindex = floor(rand() % yvalues.size());
+		int y = yvalues[yindex];
+		yvalues.erase(yvalues.begin() + yindex);
+
+		bridges.back().set_x(x);
+		bridges.back().set_y(y);
+
+		int colori = floor(rand() % 4);
+		bridges.back().set_color(colors[colori]);
+		// Getting the value of the highest point in all enemyies
+		if (bridges.back().get_y() < min_current_y) {
+			min_current_y = bridges.back().get_y();
+		}
+	}
+
+	for (int i = 0; i < shipsnum; i++) {
+		point p{ 0,0 };
+		if (!yvalues.size()) continue;
+		ships.push_back(
+			Ship(game, p, 0, 0)
+		);
+		
+		int size = min_size + (rand() % (max_size - min_size + 1));
+		ships.back().set_size(size);
+
+		int local_max_x = global_max_x - ships.back().get_width();
+		int local_max_y = global_max_y - ships.back().get_height();
+		int x = min_x + (rand() % (local_max_x - min_x - 1));
+		// int y = min_y + (rand() % (local_max_y - min_y - 1));
+
+		int yindex = floor(rand() % yvalues.size());
+		int y = yvalues[yindex];
+		yvalues.erase(yvalues.begin() + yindex);
+
+		ships.back().set_x(x);
+		ships.back().set_y(y);
+
+		int colori = floor(rand()%4);
+		ships.back().set_color(colors[colori]);
+		// Getting the value of the highest point in all enemyies
+		if (ships.back().get_y() < min_current_y) {
+			min_current_y = ships.back().get_y();
+		}
+	}
+	
+	for (int i = 0; i < tanknum; i++) {
+		point p{ 0,0 };
+		if (!yvalues.size()) continue;
+		tanks.push_back(Tank(game, p, 0, 0));
+
+
+		int size = min_size + (rand() % (max_size - min_size - 1));
+		tanks.back().set_size(size);
+
+		int local_max_x = global_max_x;
+		int local_max_y = global_max_y - tanks.back().get_height();
+		int x = min_x + (rand() % (local_max_x - min_x - 1));
+		// int y = min_y + (rand() % (local_max_y - min_y - 1));
+		int yindex = floor(rand() % yvalues.size());
+		int y = yvalues[yindex];
+		yvalues.erase(yvalues.begin() + yindex);
+	
+		tanks.back().set_x(x);
+		tanks.back().set_y(y);
+		int colori = floor(rand() % 4);
+		tanks.back().set_color(colors[colori]);
+
+		// Getting the value of the highest point in all enemyies
+		if (tanks.back().get_y() < min_current_y) {
+			min_current_y = tanks.back().get_y();
+		}
+	}
 
 }
+
+
+vector<const Enemy* > EnemyManeger::getAllEnemies() const {
+	vector<const Enemy* > allEnemies = {};
+	//allEnemies.insert(allEnemies.end(), tanks.begin(), tanks.end());
+	//allEnemies.insert(allEnemies.end(), bridges.begin(), bridges.end());
+	//allEnemies.insert(allEnemies.end(), ships.begin(), ships.end());
+	//allEnemies.insert(allEnemies.end(), jets.begin(), jets.end());
+	//allEnemies.insert(allEnemies.end(), helis.begin(), helis.end());
+
+	for (int i = 0; i < tanks.size(); i++) {
+		allEnemies.push_back(
+			(&tanks[i])
+		);
+	}
+	for (int i = 0; i < bridges.size(); i++) {
+		allEnemies.push_back(
+			(&bridges[i])
+		);
+	}
+	for (int i = 0; i < ships.size(); i++) {
+		allEnemies.push_back(
+			(&ships[i])
+		);
+	}
+
+	for (int i = 0; i < jets.size(); i++) {
+		allEnemies.push_back(
+			(&jets[i])
+		);
+	}
+	for (int i = 0; i < helis.size(); i++) {
+		allEnemies.push_back(
+			(&helis[i])
+		);
+	}
+	return allEnemies;
+}
+
 
 void EnemyPlane::draw() const {
 	window *w = pGame->getWind();
@@ -512,4 +582,3 @@ void EnemyHelicopter::moveVertical() {
 		}
 	}
 }
-

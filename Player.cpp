@@ -2,7 +2,9 @@
 #include "Game.h"
 
 
-Player::Player(Game* G, point p, int w, int h): GameObject(G, p, w, h, BLACK, BLACK) {}
+Player::Player(Game* G, point p, int w, int h): GameObject(G, p, w, h, BLACK, BLACK) {
+	bullets = {};
+}
 
 void Player::draw() const {
 	// The total width and height of the original drawing
@@ -85,8 +87,13 @@ void Player::movebullets(int bspeed) {
 	}
 }
 
-void Player::drawbullets(window& mainwin) const {
+void Player::drawbullets() const {
 	for (int i = 0; i < bulletcount; i++) {
 		bullets[i].draw();
 	}
+}
+
+void Player::collisionAction(GameObject* other)
+{
+	cout << other << "\n";
 }

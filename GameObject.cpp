@@ -14,7 +14,14 @@ void GameObject::setRefPoint(point p)
 
 // you should implement this function knowing that each game object has refPoint, width and height 
 // for simplicity, you can consider all game objects are rectangles
-bool GameObject::CollisionDetection(const GameObject& gObj)
+bool GameObject::CollisionDetection(const GameObject& other)
 {
+	// Check if the two rectangles overlap
+	if (RefPoint.x < other.RefPoint.x + other.width &&
+		RefPoint.x + width > other.RefPoint.x &&
+		RefPoint.y < other.RefPoint.y + other.height &&
+		height + RefPoint.y > other.RefPoint.y) {
+		return true;
+	}
 	return false;
 }

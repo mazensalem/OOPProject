@@ -10,6 +10,8 @@ class Enemy: public GameObject {
 public:
 	Enemy(Game* G, point p, int w, int h, color c) :GameObject(G, p, w, h, c, BLACK){}
 
+	virtual void collisionAction(GameObject* other) override {};
+	virtual void draw() const override {};
 	void set_x(int ux) { RefPoint.x = ux; }
 	void set_y(int uy) { RefPoint.y = uy; }
 	void set_size(int usize) { 
@@ -23,6 +25,7 @@ public:
 	int get_x() const { return RefPoint.x; }
 	int get_y() const { return RefPoint.y; }
 	color get_color() const { return fillColor; }
+
 protected:
 	double basewidth=0;
 	double basehieght=0;
@@ -83,15 +86,17 @@ private:
 
 
 
-class EnemyManegar
+class EnemyManeger
 {
 public:
-	EnemyManegar(Game *G) {
+	EnemyManeger(Game *G) {
 		game = G;
 	}
-	void setlevel(int level) { EnemyManegar::level = level; }
-	void setspeed(int speed) { EnemyManegar::speed = speed; }
+	void setlevel(int level) { EnemyManeger::level = level; }
+	void setspeed(int speed) { EnemyManeger::speed = speed; }
 	void moveForward(int speed);
+
+	vector<const Enemy*> getAllEnemies() const;
 
 	void clearEnemy() { 
 		tanks.clear();
@@ -119,7 +124,7 @@ private:
 	vector<EnemyPlane> jets;
 	vector<EnemyHelicopter> helis;
 	int min_x = 280, min_y = -900, global_max_x = 920, global_max_y = 0;
-	int min_size = 50, max_size = 300;
+	int min_size = 50, max_size = 125;
 
 	color colors[4] = { BLACK, BLUE, RED, GREENYELLOW };
 

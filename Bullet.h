@@ -16,7 +16,8 @@ public:
 	
 	void setbcc(int ind, color c) { bcc[ind] = c; }
 	void setbrc(int ind, color c) { brc[ind] = c; }
-
+	
+	void collisionAction(GameObject* other) override;
 
 
 private:

@@ -26,3 +26,7 @@ void Bullet::draw() const {
 		RefPoint.x, RefPoint.y + .2 * height,
 		RefPoint.x + width, RefPoint.y + .8 * height);
 }
+
+void Bullet::collisionAction(GameObject* other)
+{
+}
