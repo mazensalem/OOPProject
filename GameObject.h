@@ -11,6 +11,7 @@ public:
 	virtual void draw() const = 0; //for a game object to draw itself on the screen
 	void setRefPoint(point p);
 	bool CollisionDetection(const GameObject& other);
+	bool isInside() const;	//check if the point is inside the game object
 
 	//-- The following functions should be supported by the shape class
 	//-- It should be overridden by each inherited shape

@@ -244,7 +244,7 @@ void Game::go()
 		DrawGame();
 		MoveForward(config.normalspeed);
 		// END FROM YOUSEF
-
+		/*
 		for (int i = 0; i < objs.size(); i++) {
 			for (int j = 0; j < objs.size() && i != j; j++) {
 				
@@ -255,8 +255,16 @@ void Game::go()
 				
 			}
 		}
-
+		*/
 		pWind->UpdateBuffer();
+		for (int i = 0; i < (*(player.getBulletsPtr())).size(); i++)
+		{
+			if (!((*(player.getBulletsPtr()))[i].isInside())) {
+				(*(player.getBulletsPtr())).erase((*(player.getBulletsPtr())).begin() + i);
+				player.decreaseBulletCount();
+			}
+		}
+		cout << (*(player.getBulletsPtr())).size() << "\n";
 		Pause(20);
 
 		//printMessage("Ready...");
