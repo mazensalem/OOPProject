@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Game.h"
+#include <fstream>
 
 void Tank::draw() const {
 	window *mainwin = pGame->getWind();
@@ -262,7 +263,7 @@ void Ship::draw() const {
 		60 * (double)height / ytotal + y);
 }
 
-void EnemyManeger::moveForward(int speed) {
+void EnemyManager::moveForward(int speed) {
 	min_current_y += speed;
 	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].set_y(tanks[i].get_y() + speed);
@@ -287,7 +288,7 @@ void EnemyManeger::moveForward(int speed) {
 	}
 }
 
-void EnemyManeger::view(window& mainwin) const {
+void EnemyManager::view(window& mainwin) const {
 	// View the tanks then briges then ships
 	//cout << tanks.size() + bridges.size() + ships.size() + jets.size() + helis.size();
 	for (int i = 0; i < tanks.size(); i++) {
@@ -308,7 +309,7 @@ void EnemyManeger::view(window& mainwin) const {
 	}
 }
 
-void EnemyManeger::update(int nspeed, int nlevel) {
+void EnemyManager::update(int nspeed, int nlevel) {
 	min_current_y = 100000;
 	srand(time(0));
 	speed = nspeed;
@@ -479,7 +480,7 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 
 }
 
-void EnemyManeger::cleanUp(window *w)
+void EnemyManager::cleanUp(window *w)
 {
 	for (int i = 0; i < tanks.size(); i++) {
 		if (tanks[i].get_y() > w->GetHeight()) {
@@ -514,7 +515,7 @@ void EnemyManeger::cleanUp(window *w)
 	}
 }
 
-void EnemyManeger::deleteenemy(Enemy* E)
+void EnemyManager::deleteenemy(Enemy* E)
 {
 	for (int i = 0; i < tanks.size(); i++) {
 		if (&tanks[i] == E) {
@@ -554,7 +555,7 @@ void EnemyManeger::deleteenemy(Enemy* E)
 	}
 }
 
-vector<const Enemy*> EnemyManeger::getAllEnemies() const {
+vector<const Enemy*> EnemyManager::getAllEnemies() const {
 	vector<const Enemy* > allEnemies = {};
 
 	for (int i = 0; i < tanks.size(); i++) {
@@ -647,4 +648,24 @@ void EnemyHelicopter::moveVertical() {
 			verticalspeed = abs(verticalspeed);
 		}
 	}
+}
+
+void Tank::save(ofstream& file) const {
+	file << "tank " << RefPoint.x << " " << RefPoint.y << "\n";
+}
+
+void Bridge::save(ofstream& file)  const {
+	file << "bridge " << RefPoint.x << " " << RefPoint.y << "\n";
+}
+
+void Ship::save(ofstream& file)  const {
+	file << "ship " << RefPoint.x << " " << RefPoint.y << "\n";
+}
+
+void EnemyHelicopter::save(ofstream& file)  const {
+	file << "enemyHelicopter " << RefPoint.x << " " << RefPoint.y << "\n";
+}
+
+void EnemyPlane::save(ofstream& file)  const {
+	file << "enemyPlane " << RefPoint.x << " " << RefPoint.y << "\n";
 }

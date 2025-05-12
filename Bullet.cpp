@@ -1,6 +1,7 @@
 #pragma
 #include "Bullet.h"
 #include "Game.h"
+#include <fstream>
 
 Bullet::Bullet(Game* G, point p): GameObject(G, p, 10, 25, BLACK, BLACK) {
 		p.x = 600;
@@ -31,4 +32,7 @@ void Bullet::collisionAction(GameObject* other)
 	if (other->getdeletedscore() > 0 && other->gety() > 0) {
 		pGame->increasescore(other->getdeletedscore());
 	}
+}
+void Bullet::save(ofstream& file) const {
+	file << "bullet " << RefPoint.x << " " << RefPoint.y << "\n";
 }

@@ -11,7 +11,6 @@ public:
 
 	void setx(int ux) { RefPoint.x = ux; }
 	void sety(int uy) { RefPoint.y = uy; }
-	void decreaseBulletCount() { bulletcount--; }
 	void decreaseNumLives() { numLives--; }
 	void increaseFuel() { fuel += 10; }
 	void setscore(int uscore) { score = uscore; }
@@ -19,7 +18,7 @@ public:
 	int getx() const { return RefPoint.x; }
 	int gety() const { return RefPoint.y; }
 	int getNumLives() const { return numLives; }
-	int getBulletCount() const { return bulletcount; }
+	int getBulletCount() const { return bullets.size(); }
 	vector<Bullet>* getBulletsPtr() { return &bullets; }
 	int getlevel() const { return level; }
 	int getspeed() const { return speed; }
@@ -32,9 +31,9 @@ public:
 	void drawbullets() const;
 	void collisionAction(GameObject* other) override;
 
-	
+	void save(ofstream& file) const override;
 
 private:
-	int bulletcount = 0, maxbulletcapacity = 100000, numLives = 3, fuel = 100, level=2, speed=1, score=0;
+	int numLives = 3, fuel = 100, level=2, speed=1, score=0;
 	vector<Bullet> bullets;
 };
