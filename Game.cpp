@@ -240,7 +240,6 @@ void Game::go()
 		MoveForward(config.normalspeed);
 		
 		// END FROM YOUSEF
-
 		// collision checks
 		for (int i = 0; i < player.getBulletsPtr()->size(); i++) {
 			Bullet& B = (*player.getBulletsPtr())[i];
@@ -264,8 +263,16 @@ void Game::go()
 				}
 			}
 		}
-
+    
 		pWind->UpdateBuffer();
+		for (int i = 0; i < (*(player.getBulletsPtr())).size(); i++)
+		{
+			if (!((*(player.getBulletsPtr()))[i].isInside())) {
+				(*(player.getBulletsPtr())).erase((*(player.getBulletsPtr())).begin() + i);
+				player.decreaseBulletCount();
+			}
+		}
+		cout << (*(player.getBulletsPtr())).size() << "\n";
 		Pause(20);
 
 		//printMessage("Ready...");

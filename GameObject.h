@@ -12,6 +12,7 @@ public:
 	virtual void draw() const = 0; //for a game object to draw itself on the screen
 	void setRefPoint(point p);
 	bool CollisionDetection(const GameObject& other);
+	bool isInside() const;	//check if the point is inside the game object
 	
 	int getdeletedscore() const { return deletedscore; }
 	int gety() const { return RefPoint.y; }
