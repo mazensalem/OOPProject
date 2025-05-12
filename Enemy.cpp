@@ -290,7 +290,7 @@ void EnemyManager::moveForward(int speed) {
 
 void EnemyManager::view(window& mainwin) const {
 	// View the tanks then briges then ships
-	//cout << tanks.size() + bridges.size() + ships.size() + jets.size() + helis.size();
+	// cout << tanks.size() + bridges.size() + ships.size() + jets.size() + helis.size();
 	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].draw();
 	}
@@ -315,7 +315,7 @@ void EnemyManager::update(int nspeed, int nlevel) {
 	speed = nspeed;
 	level = nlevel;
 	// This formale needs to be changed
-	double step = 200 - 50 * (speed + level);
+	double step = 200 - 40 * level;
 	int starty = -900, endy = -20;
 	tanknum = ceil(180/step);
 	brigesnum = ceil(180 / step);
@@ -555,7 +555,16 @@ void EnemyManager::deleteenemy(Enemy* E)
 	}
 }
 
-vector<const Enemy*> EnemyManager::getAllEnemies() const {
+void EnemyManeger::setmanual(vector<Tank>& tanks, vector<Bridge>& bridges, vector<Ship>& ships, vector<EnemyPlane>& jets, vector<EnemyHelicopter>& helis)
+{
+	this->tanks = tanks;
+	this->bridges = bridges;
+	this->ships = ships;
+	this->jets = jets;
+	this->helis = helis;
+}
+
+vector<const Enemy*> EnemyManeger::getAllEnemies() const {
 	vector<const Enemy* > allEnemies = {};
 
 	for (int i = 0; i < tanks.size(); i++) {

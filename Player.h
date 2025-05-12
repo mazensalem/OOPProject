@@ -1,6 +1,7 @@
 #pragma once
 #include "CMUgraphicsLib\CMUgraphics.h"
 #include "Bullet.h"
+#include <ctime>
 #include<vector>
 
 class Player: public GameObject
@@ -14,6 +15,10 @@ public:
 	void decreaseNumLives() { numLives--; }
 	void increaseFuel() { fuel += 10; }
 	void setscore(int uscore) { score = uscore; }
+	void setspeed(int uspeed) { speed = uspeed; }
+	void setlevel(int ulevel) { level = ulevel; }
+	void decreasefuel();
+	void setfuel(int ufuel) { fuel = ufuel; };
 
 	int getx() const { return RefPoint.x; }
 	int gety() const { return RefPoint.y; }
@@ -33,7 +38,14 @@ public:
 
 	void save(ofstream& file) const override;
 
+	void hit();
+	void refuel() { stime = time(NULL); }
+
+	
+
 private:
-	int numLives = 3, fuel = 100, level=2, speed=1, score=0;
+	int bulletcount = 0, maxbulletcapacity = 100000, numLives = 5, fuel = 100, level = 2, speed = 1, score = 0,
+		flyingtime = 0;
+	time_t stime;
 	vector<Bullet> bullets;
 };

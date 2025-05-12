@@ -5,6 +5,7 @@
 
 Player::Player(Game* G, point p, int w, int h): GameObject(G, p, w, h, BLACK, BLACK) {
 	bullets = {};
+	stime = time(NULL);
 }
 
 void Player::draw() const {
@@ -71,6 +72,16 @@ void Player::draw() const {
 	mainwin->DrawPolygon(x2, y2, 3);
 }
 
+void Player::decreasefuel()
+{
+	time_t now = time(NULL);
+	int secdiff = difftime(stime, now);
+	setfuel(100 - abs(secdiff) / 3);
+	if (fuel <= 0) {
+		pGame->exit();
+	}
+}
+
 void Player::firebullet() {
 		point p;
 		p.x = (RefPoint.x + width / 2) - 5;
@@ -100,4 +111,11 @@ void Player::save(ofstream& file) const {
 	for (int i = 0; i < bullets.size(); i++) {
 		bullets[i].save(file);
 	}
+}
+void Player::hit()
+{
+	numLives--;
+	if (numLives < 0) {
+		pGame->exit();
+	}	
 }

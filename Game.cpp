@@ -107,7 +107,7 @@ void Game::MoveForward(int speed) {
 		updateobjs();
 	}
 	double viewpercent = En.precentempty(*pWind);
-	if (viewpercent > 0 && (1 - viewpercent)*100 <= player.getlevel() * 10) 
+	if (viewpercent > 0 && (1 - viewpercent)*10 <= player.getlevel()) 
 	{
 		En.update(player.getspeed(), player.getlevel());
 		updateobjs();
@@ -116,7 +116,10 @@ void Game::MoveForward(int speed) {
 	En.cleanUp(pWind);
 	BG.settreey(BG.gettreey() + speed);
 	En.moveForward(speed);
+	
 	player.movebullets(speed);
+	player.decreasefuel();
+
 	F1.move(speed);
 }
 
@@ -127,6 +130,21 @@ void Game::updateobjs()
 	for (int i = 0; i < En.getAllEnemies().size(); i++) {
 		Enemy* E = const_cast<Enemy*>(En.getAllEnemies()[i]);
 		objs.push_back(E);
+	}
+}
+
+void Game::increasescore(int inc)
+{
+	player.setscore(player.getscore() + inc); 
+	if (player.getspeed() < 5) {
+		if ((player.getscore() / 1000) + 1 > player.getspeed()) {
+			player.setspeed((player.getscore() / 500) + 1);
+		}
+	}
+	if (player.getlevel() < 4) {
+		if ((player.getscore() / 1500) + 1 > player.getlevel()) {
+			player.setlevel((player.getscore() / 1000) + 1);
+		}
 	}
 }
 
@@ -203,11 +221,12 @@ window* Game::getWind() const
 	return pWind;
 }
 
+void Game::exit() {isExit = true;}
+
 void Game::go()
 {
 	//This function reads the position where the user clicks to determine the desired operation
 	int x, y;
-	bool isExit = false;
 
 	// FROM YOUSSEF
 	pWind->SetBuffering(true);
@@ -243,11 +262,11 @@ void Game::go()
 			}
 			else if (key == 8) {
 				//Forward
-				MoveForward(config.fastspeed);
+				MoveForward(player.getspeed() * config.fastspeed);
 			}
 			else if (key == 2) {
 				//Backward
-				MoveForward(config.slowspeed);
+				MoveForward(player.getspeed() * config.slowspeed);
 
 			}
 
@@ -263,7 +282,7 @@ void Game::go()
 		}
 
 		DrawGame();
-		MoveForward(config.normalspeed);
+		MoveForward(player.getspeed() * config.normalspeed);
 		
 		// END FROM YOUSEF
 		// collision checks
@@ -276,6 +295,7 @@ void Game::go()
 					player.getBulletsPtr()->erase(
 						player.getBulletsPtr()->begin() + i
 					);
+					i--;
 					if (objs[j]->getdeletedscore() > 0) {
 						Enemy* DE = dynamic_cast<Enemy*>(objs[j]);
 						En.deleteenemy(DE);
@@ -289,15 +309,32 @@ void Game::go()
 				}
 			}
 		}
-    
-		pWind->UpdateBuffer();
+		
+		for (int i = 0; i < objs.size(); i++) {
+			if (objs[i]->CollisionDetection(player)) {
+				if (objs[i]->getdeletedscore() > 0) {
+					Enemy* DE = dynamic_cast<Enemy*>(objs[i]);
+					En.deleteenemy(DE);
+					player.hit();
+					i--;
+				}
+				else {
+					F1.sety(-90);
+					F1.setxrand(280, 920);
+					player.refuel();
+				}
+				updateobjs();
+			}
+		}
+
+		// Clean up the bullets
 		for (int i = 0; i < (*(player.getBulletsPtr())).size(); i++)
 		{
 			if (!((*(player.getBulletsPtr()))[i].isInside())) {
 				(*(player.getBulletsPtr())).erase((*(player.getBulletsPtr())).begin() + i);
 			}
 		}
-		cout << (*(player.getBulletsPtr())).size() << "\n";
+		pWind->UpdateBuffer();
 		Pause(20);
 
 		//printMessage("Ready...");
