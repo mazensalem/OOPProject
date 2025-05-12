@@ -279,6 +279,9 @@ void Game::go()
 			if (s == " ") {
 				player.firebullet();
 			}
+			else if (s == "p" || s == "P") {
+				isPaused = true;
+			}
 		}
 
 		DrawGame();
@@ -334,6 +337,122 @@ void Game::go()
 				(*(player.getBulletsPtr())).erase((*(player.getBulletsPtr())).begin() + i);
 			}
 		}
+
+
+
+		// Tool bar checks
+		while (isPaused) {
+			pWind->WaitMouseClick(x, y);	//Wait for mouse click
+			
+			// load
+			if (x < 199 && x>151 && y < 56 && y>9)
+			{
+				loadFile.open("save.txt");
+				string line;
+				vector<Tank> tanks;
+				vector<Ship> ships;
+				vector<EnemyPlane> jets;
+				vector<EnemyHelicopter> helis;
+				vector<Bridge> bridges;
+				while (getline(loadFile, line)) {
+					istringstream iss(line);
+					string type;
+					iss >> type;
+					if (type == "player") {
+						int x, y, lives, fuel;
+						iss >> x >> y >> lives >> fuel;
+						player.setx(x);
+						player.sety(y);
+						player.setNumLives(lives);
+						player.setfuel(fuel);
+					}
+					else if (type == "tank") {
+						int x, y, width, height;
+						unsigned char r, g, b;
+						iss >> x >> y >> width >> height >> r >> g >> b;
+						color c(r, g, b);
+						Tank T(this, { x, y }, width, height, c);
+						T.set_x(x);
+						T.set_y(y);
+						tanks.push_back(T);
+					}
+					else if (type == "ship") {
+						int x, y, width, height;
+						int r, g, b;
+						iss >> x >> y >> width >> height >> r >> g >> b;
+						color c(r, g, b);
+						Ship S(this, { x, y }, width, height, c);
+						S.set_x(x);
+						S.set_y(y);
+						ships.push_back(S);
+					}
+					else if (type == "enemyPlane") {
+						int x, y, width, height;
+						int r, g, b;
+						iss >> x >> y >> width >> height >> r >> g >> b;
+						color c(r, g, b);
+						EnemyPlane E(this, { x, y }, width, height, c);
+						E.set_x(x);
+						E.set_y(y);
+						jets.push_back(E);
+					}
+					else if (type == "enemyHelicopter") {
+						int x, y, width, height;
+						int r, g, b;
+						iss >> x >> y >> width >> height >> r >> g >> b;
+						color c(r, g, b);
+						EnemyHelicopter H(this, { x, y }, width, height, c);
+						H.set_x(x);
+						H.set_y(y);
+						helis.push_back(H);
+					}
+					else if (type == "bridge") {
+						int x, y, width, height;
+						int r, g, b;
+						iss >> x >> y >> width >> height >> r >> g >> b;
+						color c(r, g, b);
+						Bridge B(this, { x, y }, width, height, c);
+						B.set_x(x);
+						B.set_y(y);
+						bridges.push_back(B);
+					}
+				}
+				En.setmanual(tanks, bridges, ships, jets, helis);
+				loadFile.close();
+				DrawGame();
+			}
+			//save
+			else if (x < 248 && x>205 && y < 56 && y>9) {
+				player.save(saveFile);
+				for (int i = 0; i < En.getTanks().size(); i++)
+				{
+					En.getTanks()[i].save(saveFile);
+				}
+				for (int i = 0; i < En.getShips().size(); i++)
+				{
+					En.getShips()[i].save(saveFile);
+				}
+				for (int i = 0; i < En.getEnemyPlanes().size(); i++)
+				{
+					En.getEnemyPlanes()[i].save(saveFile);
+				}
+				for (int i = 0; i < En.getEnemyHelicopters().size(); i++)
+				{
+					En.getEnemyHelicopters()[i].save(saveFile);
+				}
+				for (int i = 0; i < En.getBridges().size(); i++)
+				{
+					En.getBridges()[i].save(saveFile);
+				}
+				saveFile.close();
+			}
+			
+			else {
+				isPaused = false;
+			}
+		}
+
+
 		pWind->UpdateBuffer();
 		Pause(20);
 

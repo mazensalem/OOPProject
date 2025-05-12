@@ -19,6 +19,7 @@ public:
 	void setlevel(int ulevel) { level = ulevel; }
 	void decreasefuel();
 	void setfuel(int ufuel) { fuel = ufuel; };
+	void setNumLives(int lives) { numLives = lives; }
 
 	int getx() const { return RefPoint.x; }
 	int gety() const { return RefPoint.y; }

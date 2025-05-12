@@ -112,6 +112,7 @@ void Player::save(ofstream& file) const {
 		bullets[i].save(file);
 	}
 }
+
 void Player::hit()
 {
 	numLives--;

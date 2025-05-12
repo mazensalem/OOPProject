@@ -27,6 +27,9 @@ private:
 	vector<GameObject*> objs;
 	ofstream file;
 	bool isExit = false;
+	ofstream saveFile;
+	ifstream loadFile;
+	bool isPaused = false;
 
 public:
 	Game();

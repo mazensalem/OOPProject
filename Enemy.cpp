@@ -290,7 +290,7 @@ void EnemyManager::moveForward(int speed) {
 
 void EnemyManager::view(window& mainwin) const {
 	// View the tanks then briges then ships
-	// cout << tanks.size() + bridges.size() + ships.size() + jets.size() + helis.size();
+	//cout << tanks.size() + bridges.size() + ships.size() + jets.size() + helis.size();
 	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].draw();
 	}
@@ -660,22 +660,23 @@ void EnemyHelicopter::moveVertical() {
 	}
 }
 
+
 void Tank::save(ofstream& file) const {
-	file << "tank " << RefPoint.x << " " << RefPoint.y << "\n";
+	file << "tank " << RefPoint.x << " " << RefPoint.y << " " << width << " " << height << " " << int(fillColor.ucRed) << " " << (int)fillColor.ucGreen << " " << (int)fillColor.ucBlue << "\n";
 }
 
 void Bridge::save(ofstream& file)  const {
-	file << "bridge " << RefPoint.x << " " << RefPoint.y << "\n";
+	file << "bridge " << RefPoint.x << " " << RefPoint.y << " " << width << " " << height << " " << (int)fillColor.ucRed << " " << (int)fillColor.ucGreen << " " << (int)fillColor.ucBlue << "\n";
 }
 
 void Ship::save(ofstream& file)  const {
-	file << "ship " << RefPoint.x << " " << RefPoint.y << "\n";
+	file << "ship " << RefPoint.x << " " << RefPoint.y << " " << width << " " << height << " " << (int)fillColor.ucRed << " " << (int)fillColor.ucGreen << " " << (int)fillColor.ucBlue << "\n";
 }
 
 void EnemyHelicopter::save(ofstream& file)  const {
-	file << "enemyHelicopter " << RefPoint.x << " " << RefPoint.y << "\n";
+	file << "enemyHelicopter " << RefPoint.x << " " << RefPoint.y << " " << width << " " << height << " " << (int)fillColor.ucRed << " " << (int)fillColor.ucGreen << " " << (int)fillColor.ucBlue << "\n";
 }
 
 void EnemyPlane::save(ofstream& file)  const {
-	file << "enemyPlane " << RefPoint.x << " " << RefPoint.y << "\n";
+	file << "enemyPlane " << RefPoint.x << " " << RefPoint.y << " " << width << " " << height << " " << (int)fillColor.ucRed << " " << (int)fillColor.ucGreen << " " << (int)fillColor.ucBlue << "\n";
 }

@@ -1,11 +1,11 @@
 player 550 450 5 100
-tank 792 -6
-tank 661 82
-ship 584 -286
-ship 449 -140
-enemyPlane -100 -780
-enemyPlane -100 -540
-enemyHelicopter 625 -300
-enemyHelicopter 549 -660
-bridge 280 -1540
-bridge 280 -1060
+tank 621 -502 82 82 255 0 0
+tank 898 -232 52 52 173 255 47
+ship 691 -832 52 52 173 255 47
+ship 631 -161 101 101 255 0 0
+enemyPlane -100 -540 47 55 173 255 47
+enemyPlane -100 -660 47 55 0 0 255
+enemyHelicopter 285 60 55 40 255 0 0
+enemyHelicopter 754 180 55 40 0 0 0
+bridge 280 -940 640 128 255 0 0
+bridge 280 -1540 640 128 0 0 0
