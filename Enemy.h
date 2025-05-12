@@ -44,7 +44,7 @@ public:
 		deletedscore = 30;
 	}
 	void draw() const override;
-
+	void save(ofstream& file) const override;
 private:
 };
 
@@ -55,6 +55,7 @@ public:
 		deletedscore = 30;
 	}
 	void draw() const override;
+	void save(ofstream& file) const override;
 private:
 };
 
@@ -65,6 +66,7 @@ public:
 		deletedscore = 30;
 	}
 	void draw() const override;
+	void save(ofstream& file) const override;
 private:
 };
 
@@ -79,7 +81,7 @@ public:
 	void moveVertical();
 
 	void setverticalspeed(int sp) { verticalspeed = sp; }
-
+	void save(ofstream& file) const override;
 
 private:
 	int verticalspeed = 5;
@@ -105,6 +107,7 @@ public:
 			verticalspeed = abs(sp);
 		}
 	}
+	void save(ofstream& file) const override;
 	
 private:
 	double size=.25;
@@ -112,14 +115,14 @@ private:
 };
 
 
-class EnemyManeger
+class EnemyManager
 {
 public:
-	EnemyManeger(Game* G) {
+	EnemyManager(Game* G) {
 		game = G;
 	}
-	void setlevel(int level) { EnemyManeger::level = level; }
-	void setspeed(int speed) { EnemyManeger::speed = speed; }
+	void setlevel(int level) { EnemyManager::level = level; }
+	void setspeed(int speed) { EnemyManager::speed = speed; }
 	void moveForward(int speed);
 
 	vector<const Enemy*> getAllEnemies() const;
@@ -144,8 +147,23 @@ public:
 
 	void deleteenemy(Enemy* E);
 
+	vector<Bridge> getBridges() const {
+		return bridges;
+	}
+	vector<Tank> getTanks() const {
+		return tanks;
+	}
+	vector<EnemyPlane> getEnemyPlanes() const {
+		return jets;
+	}
+	vector<EnemyHelicopter> getEnemyHelicopters() const {
+		return helis;
+	}
+	vector<Ship> getShips() const {
+		return ships;
+	}
 	void setmanual(vector<Tank> &tanks, vector<Bridge> &bridges, vector<Ship> &ships, vector<EnemyPlane> &jets, vector<EnemyHelicopter> &helis);
-
+  
 private:
 	Game* game;
 	int level = 0, speed = 0,

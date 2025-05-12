@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Game.h"
+#include <fstream>
 
 
 Player::Player(Game* G, point p, int w, int h): GameObject(G, p, w, h, BLACK, BLACK) {
@@ -82,9 +83,6 @@ void Player::decreasefuel()
 }
 
 void Player::firebullet() {
-	//if (bulletcount != maxbulletcapacity) { 
-		bulletcount++;
-	//}
 		point p;
 		p.x = (RefPoint.x + width / 2) - 5;
 		p.y = RefPoint.y;
@@ -108,6 +106,12 @@ void Player::collisionAction(GameObject* other)
 {
 }
 
+void Player::save(ofstream& file) const {
+	file << "player " << RefPoint.x << " " << RefPoint.y << " " << numLives << " " << fuel << "\n";
+	for (int i = 0; i < bullets.size(); i++) {
+		bullets[i].save(file);
+	}
+}
 void Player::hit()
 {
 	numLives--;

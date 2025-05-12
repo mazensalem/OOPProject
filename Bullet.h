@@ -18,7 +18,7 @@ public:
 	void setbrc(int ind, color c) { brc[ind] = c; }
 	
 	void collisionAction(GameObject* other) override;
-
+	void save(ofstream& file) const override;
 
 private:
 	color bcc[2];

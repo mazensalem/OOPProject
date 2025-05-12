@@ -19,6 +19,7 @@ public:
 	void setxrand(int min, int max);
 
 	void collisionAction(GameObject* other) override;
+	void save(ofstream& file) const override;
 private:
 };
 

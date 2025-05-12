@@ -1,6 +1,7 @@
 #include "Fuel.h"
 #include "Game.h"
 #include <time.h>
+#include <fstream>
 
 void Fuel::draw() const {
 	window *w = pGame->getWind();
@@ -28,3 +29,6 @@ void Fuel::collisionAction(GameObject* other)
 
 }
 
+void Fuel::save(ofstream& file) const {
+	file << "fuel " << RefPoint.x << " " << RefPoint.y << "\n";
+}

@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include <fstream>
 using namespace std;
 
 
@@ -14,6 +14,8 @@ Game::Game():
 
 	//2 - create and draw the toolbar
 	//createToolbar();
+
+	file.open("save.txt");
 
 	//3 - create and draw the backgroundPlayingArea
 	BG.Draw(*pWind, 3, .7);
@@ -36,6 +38,30 @@ Game::Game():
 
 	//7- Create and clear the status bar
 	Drawstatusbar(*pWind, 0, 5, 5, 50);
+
+	player.save(file);
+	for (int i = 0; i < En.getTanks().size(); i++)
+	{
+		En.getTanks()[i].save(file);
+	}
+	for (int i = 0; i < En.getShips().size(); i++)
+	{
+		En.getShips()[i].save(file);
+	}
+	for (int i = 0; i < En.getEnemyPlanes().size(); i++)
+	{
+		En.getEnemyPlanes()[i].save(file);
+	}
+	for (int i = 0; i < En.getEnemyHelicopters().size(); i++)
+	{
+		En.getEnemyHelicopters()[i].save(file);
+	}
+	for (int i = 0; i < En.getBridges().size(); i++)
+	{
+		En.getBridges()[i].save(file);
+	}
+	file.close();
+
 	// clearStatusBar();
 	updateobjs();
 }
@@ -263,7 +289,7 @@ void Game::go()
 		for (int i = 0; i < player.getBulletsPtr()->size(); i++) {
 			Bullet& B = (*player.getBulletsPtr())[i];
 			for (int j = 0; j < objs.size(); j++) {
-				if (objs[j]->CollisionDetection(B) && objs[j]->gety() > 0) {
+				if (objs[j]->CollisionDetection(B)) {
 					objs[j]->collisionAction(&B);
 					B.collisionAction(objs[j]);
 					player.getBulletsPtr()->erase(
@@ -306,7 +332,6 @@ void Game::go()
 		{
 			if (!((*(player.getBulletsPtr()))[i].isInside())) {
 				(*(player.getBulletsPtr())).erase((*(player.getBulletsPtr())).begin() + i);
-				player.decreaseBulletCount();
 			}
 		}
 		pWind->UpdateBuffer();

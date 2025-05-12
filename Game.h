@@ -11,6 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <fstream>
 
 
 class Game
@@ -20,10 +21,11 @@ private:
 	point p = { -1, -1 };
 	ToolBar T1;
 	Background BG;
-	EnemyManeger En;
+	EnemyManager En;
 	Fuel F1;
 	Player player;
 	vector<GameObject*> objs;
+	ofstream file;
 	bool isExit = false;
 
 public:
