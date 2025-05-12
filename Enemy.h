@@ -4,14 +4,16 @@
 #include "GameObject.h"
 #include <time.h>
 #include <vector>
-
+#include <iostream>
+using namespace std;
 
 class Enemy: public GameObject {
 public:
-	Enemy(Game* G, point p, int w, int h, color c) :GameObject(G, p, w, h, c, BLACK){}
+	Enemy(Game* G, point p, int w, int h, color c) :GameObject(G, p, w, h, c, BLACK) {}
 
 	virtual void collisionAction(GameObject* other) override {};
 	virtual void draw() const override {};
+
 	void set_x(int ux) { RefPoint.x = ux; }
 	void set_y(int uy) { RefPoint.y = uy; }
 	void set_size(int usize) { 
@@ -19,6 +21,8 @@ public:
 		height = usize;
 	}
 	void set_color(color ucolor) { fillColor = ucolor; }
+	void set_height(int h) { height = h; }
+	void set_width(int w) { width = w; }
 
 	double get_width() const { return width; }
 	double get_height() const { return height; }
@@ -37,6 +41,7 @@ class Tank: public Enemy
 public:
 	Tank(Game* G, point p, int w, int h, color c = BLACK) :Enemy(G, p, w, h, c) {
 		basehieght = 500, basewidth = 500;
+		deletedscore = 30;
 	}
 	void draw() const override;
 
@@ -46,25 +51,34 @@ private:
 class Bridge: public Enemy
 {
 public:
-	Bridge(Game* G, point p, int w, int h, color c = BLACK) :Enemy(G, p, w, h, c) {}
+	Bridge(Game* G, point p, int w, int h, color c = BLACK) :Enemy(G, p, w, h, c) {
+		deletedscore = 30;
+	}
 	void draw() const override;
-
 private:
 };
 
 class Ship: public Enemy
 {
 public:
-	Ship(Game* G, point p, int w, int h, color c = BLACK): Enemy(G, p, w, h, c) {}
+	Ship(Game* G, point p, int w, int h, color c = BLACK): Enemy(G, p, w, h, c) {
+		deletedscore = 30;
+	}
 	void draw() const override;
 private:
 };
 
 class EnemyPlane: public Enemy {
 public:
-	EnemyPlane(Game* G, point p, int w, int h, color c = BLACK) : Enemy(G, p, w, h, c) {} 
+	EnemyPlane(Game* G, point p, int w, int h, color c = BLACK) : Enemy(G, p, w, h, c) {
+		deletedscore = 100;
+		width = size * 190;
+		height = 55;
+	} 
 	void draw() const override;
 	void moveVertical();
+
+	void setverticalspeed(int sp) { verticalspeed = sp; }
 
 
 private:
@@ -74,10 +88,23 @@ private:
 
 class EnemyHelicopter : public Enemy {
 public:
-	EnemyHelicopter(Game* G, point p, int w, int h, color c = BLACK) : Enemy(G, p, w, h, c) {}
+	EnemyHelicopter(Game* G, point p, int w, int h, color c = BLACK) : Enemy(G, p, w, h, c) {
+		deletedscore = 60;
+		width = 55;
+		height = 40;
+	}
 	void draw() const override;
 
 	void moveVertical();
+
+	void setverticalspeed(int sp) { 
+		if (verticalspeed <= 0) {
+			verticalspeed = -abs(sp);
+		}
+		else {
+			verticalspeed = abs(sp);
+		}
+	}
 	
 private:
 	double size=.25;
@@ -85,11 +112,10 @@ private:
 };
 
 
-
 class EnemyManeger
 {
 public:
-	EnemyManeger(Game *G) {
+	EnemyManeger(Game* G) {
 		game = G;
 	}
 	void setlevel(int level) { EnemyManeger::level = level; }
@@ -98,26 +124,30 @@ public:
 
 	vector<const Enemy*> getAllEnemies() const;
 
-	void clearEnemy() { 
+	void clearEnemy() {
 		tanks.clear();
 		bridges.clear();
 		ships.clear();
 		jets.clear();
 		helis.clear();
-		tanknum = 0; brigesnum = 0; shipsnum = 0; jetsnum = 0; helisnum = 0; 
+		tanknum = 0; brigesnum = 0; shipsnum = 0; jetsnum = 0; helisnum = 0;
 	}
 
 	void view(window& mainwin) const;
 	void update(int nspeed, int nlevel);
 
-	bool isout(window &mainwin) {
-		return min_current_y > mainwin.GetHeight();
+	void cleanUp(window* w);
+
+	double precentempty(window& mainwin) const {
+		return (double)min_current_y / mainwin.GetHeight();
 	}
+
+	void deleteenemy(Enemy* E);
 
 private:
 	Game* game;
-	int level=0, speed=0,
-		tanknum = 0, brigesnum = 0, shipsnum = 0, jetsnum=0, helisnum=0;
+	int level = 0, speed = 0,
+		tanknum = 0, brigesnum = 0, shipsnum = 0, jetsnum = 0, helisnum = 0;
 	vector<Tank> tanks;
 	vector<Bridge> bridges;
 	vector<Ship> ships;

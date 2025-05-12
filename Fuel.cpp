@@ -15,6 +15,7 @@ void Fuel::draw() const {
 	w->DrawString(RefPoint.x + 5, RefPoint.y + 19, "U");
 	w->DrawString(RefPoint.x + 6, RefPoint.y + 30, "E");
 	w->DrawString(RefPoint.x + 6, RefPoint.y + 42, "L");
+
 }
 
 void Fuel::setxrand(int min, int max)
@@ -24,5 +25,6 @@ void Fuel::setxrand(int min, int max)
 
 void Fuel::collisionAction(GameObject* other)
 {
+
 }
 

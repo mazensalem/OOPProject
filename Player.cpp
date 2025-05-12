@@ -82,18 +82,17 @@ void Player::firebullet() {
 }
 
 void Player::movebullets(int bspeed) {
-	for (int i = 0; i < bulletcount; i++) {
+	for (int i = 0; i < bullets.size(); i++) {
 		bullets[i].sety(bullets[i].gety() - bspeed);
 	}
 }
 
 void Player::drawbullets() const {
-	for (int i = 0; i < bulletcount; i++) {
+	for (int i = 0; i < bullets.size(); i++) {
 		bullets[i].draw();
 	}
 }
 
 void Player::collisionAction(GameObject* other)
 {
-	cout << other << "\n";
 }

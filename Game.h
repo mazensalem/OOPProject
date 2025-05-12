@@ -47,5 +47,6 @@ public:
 	void DrawGame();
 	void MoveForward(int speed);
 	void updateobjs();
+	void increasescore(int inc) { player.setscore(player.getscore() + inc); }
 };
 

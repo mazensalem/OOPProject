@@ -1,4 +1,6 @@
 #include "GameObject.h"
+#include <iostream>
+using namespace std;
 
 GameObject::GameObject(Game* r_pGame, point ref, int r_width, int r_height, color fc, color bc) : Drawable (r_pGame, ref, r_width, r_height)
 {
