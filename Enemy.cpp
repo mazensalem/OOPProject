@@ -555,7 +555,7 @@ void EnemyManager::deleteenemy(Enemy* E)
 	}
 }
 
-void EnemyManeger::setmanual(vector<Tank>& tanks, vector<Bridge>& bridges, vector<Ship>& ships, vector<EnemyPlane>& jets, vector<EnemyHelicopter>& helis)
+void EnemyManager::setmanual(vector<Tank>& tanks, vector<Bridge>& bridges, vector<Ship>& ships, vector<EnemyPlane>& jets, vector<EnemyHelicopter>& helis)
 {
 	this->tanks = tanks;
 	this->bridges = bridges;
@@ -564,7 +564,8 @@ void EnemyManeger::setmanual(vector<Tank>& tanks, vector<Bridge>& bridges, vecto
 	this->helis = helis;
 }
 
-vector<const Enemy*> EnemyManeger::getAllEnemies() const {
+
+vector<const Enemy*> EnemyManager::getAllEnemies() const {
 	vector<const Enemy* > allEnemies = {};
 
 	for (int i = 0; i < tanks.size(); i++) {
