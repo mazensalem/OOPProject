@@ -144,6 +144,8 @@ public:
 
 	void deleteenemy(Enemy* E);
 
+	void setmanual(vector<Tank> &tanks, vector<Bridge> &bridges, vector<Ship> &ships, vector<EnemyPlane> &jets, vector<EnemyHelicopter> &helis);
+
 private:
 	Game* game;
 	int level = 0, speed = 0,

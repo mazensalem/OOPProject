@@ -4,6 +4,7 @@
 
 Player::Player(Game* G, point p, int w, int h): GameObject(G, p, w, h, BLACK, BLACK) {
 	bullets = {};
+	stime = time(NULL);
 }
 
 void Player::draw() const {
@@ -70,6 +71,16 @@ void Player::draw() const {
 	mainwin->DrawPolygon(x2, y2, 3);
 }
 
+void Player::decreasefuel()
+{
+	time_t now = time(NULL);
+	int secdiff = difftime(stime, now);
+	setfuel(100 - abs(secdiff) / 3);
+	if (fuel <= 0) {
+		pGame->exit();
+	}
+}
+
 void Player::firebullet() {
 	//if (bulletcount != maxbulletcapacity) { 
 		bulletcount++;
@@ -95,4 +106,12 @@ void Player::drawbullets() const {
 
 void Player::collisionAction(GameObject* other)
 {
+}
+
+void Player::hit()
+{
+	numLives--;
+	if (numLives < 0) {
+		pGame->exit();
+	}	
 }
