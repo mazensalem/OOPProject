@@ -5,6 +5,7 @@ class GameObject : public Drawable
 protected:
 	color fillColor;	//game object fill color
 	color borderColor;	//game object border color
+	int deletedscore = -1;
 
 public:
 	GameObject(Game* r_pGame, point ref, int r_width, int r_height, color fc, color bc);
@@ -12,6 +13,9 @@ public:
 	void setRefPoint(point p);
 	bool CollisionDetection(const GameObject& other);
 	bool isInside() const;	//check if the point is inside the game object
+	
+	int getdeletedscore() const { return deletedscore; }
+	int gety() const { return RefPoint.y; }
 
 	//-- The following functions should be supported by the shape class
 	//-- It should be overridden by each inherited shape

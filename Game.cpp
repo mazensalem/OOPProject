@@ -63,7 +63,7 @@ void Game::DrawGame() {
 	En.view(*pWind);
 
 	// stauts bar
-	Drawstatusbar(*pWind, 0, 5, 5, 50);
+	Drawstatusbar(*pWind, player.getscore(), player.getspeed(), player.getNumLives(), player.getfuel());
 
 	// Tool bar
 	T1.Draw(*pWind);
@@ -80,13 +80,14 @@ void Game::MoveForward(int speed) {
 		F1.setxrand(280,920);
 		updateobjs();
 	}
-
-	if (En.isout(*pWind)) {
-		En.clearEnemy();
-		En.update(0, 2);
+	double viewpercent = En.precentempty(*pWind);
+	if (viewpercent > 0 && (1 - viewpercent)*100 <= player.getlevel() * 10) 
+	{
+		En.update(player.getspeed(), player.getlevel());
 		updateobjs();
 	}
 
+	En.cleanUp(pWind);
 	BG.settreey(BG.gettreey() + speed);
 	En.moveForward(speed);
 	player.movebullets(speed);
@@ -97,12 +98,6 @@ void Game::updateobjs()
 {
 	objs.clear();
 	objs.push_back(&F1);
-	objs.push_back(&player);
-	for (int i = 0; i < player.getBulletCount(); i++) {
-		objs.push_back(
-			&(*player.getBulletsPtr())[i]
-		);
-	}
 	for (int i = 0; i < En.getAllEnemies().size(); i++) {
 		Enemy* E = const_cast<Enemy*>(En.getAllEnemies()[i]);
 		objs.push_back(E);
@@ -243,19 +238,32 @@ void Game::go()
 
 		DrawGame();
 		MoveForward(config.normalspeed);
+		
 		// END FROM YOUSEF
-		/*
-		for (int i = 0; i < objs.size(); i++) {
-			for (int j = 0; j < objs.size() && i != j; j++) {
-				
-				if (objs[i]->CollisionDetection(*objs[j])) {
-					objs[i]->collisionAction(objs[j]);
-					objs[j]->collisionAction(objs[i]);
+		// collision checks
+		for (int i = 0; i < player.getBulletsPtr()->size(); i++) {
+			Bullet& B = (*player.getBulletsPtr())[i];
+			for (int j = 0; j < objs.size(); j++) {
+				if (objs[j]->CollisionDetection(B) && objs[j]->gety() > 0) {
+					objs[j]->collisionAction(&B);
+					B.collisionAction(objs[j]);
+					player.getBulletsPtr()->erase(
+						player.getBulletsPtr()->begin() + i
+					);
+					if (objs[j]->getdeletedscore() > 0) {
+						Enemy* DE = dynamic_cast<Enemy*>(objs[j]);
+						En.deleteenemy(DE);
+						j--;
+					}
+					else {
+						F1.sety(-90);
+						F1.setxrand(280, 920);
+					}
+					updateobjs();
 				}
-				
 			}
 		}
-		*/
+    
 		pWind->UpdateBuffer();
 		for (int i = 0; i < (*(player.getBulletsPtr())).size(); i++)
 		{

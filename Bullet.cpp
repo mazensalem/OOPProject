@@ -13,7 +13,6 @@ Bullet::Bullet(Game* G, point p): GameObject(G, p, 10, 25, BLACK, BLACK) {
 
 void Bullet::draw() const {
 	window *w = pGame->getWind();
-
 	w->SetPen(brc[0]);
 	w->SetBrush(bcc[1]);
 	w->DrawTriangle(
@@ -29,4 +28,7 @@ void Bullet::draw() const {
 
 void Bullet::collisionAction(GameObject* other)
 {
+	if (other->getdeletedscore() > 0 && other->gety() > 0) {
+		pGame->increasescore(other->getdeletedscore());
+	}
 }

@@ -3,6 +3,7 @@
 
 void Tank::draw() const {
 	window *mainwin = pGame->getWind();
+
 	mainwin->SetPen(fillColor, 3);
 	mainwin->SetBrush(fillColor);
 
@@ -101,24 +102,24 @@ void Tank::draw() const {
 		27 * r / basewidth);
 }
 
-
 void Bridge::draw() const {
 	window* mainwin = pGame->getWind();
+
 	mainwin->SetPen(fillColor, 3);
 	mainwin->SetBrush(fillColor);
-	int xtotal = 500, ytotal=500;
+	int xtotal = 500, ytotal=130;
 
 	// The lower part
 	int x1[] = { 35, 35,460,460 };
-	int y1[] = { 270, 240, 240, 270 };
+	int y1[] = { 135, 105, 105, 135 };
 	
 
 	// The top part
 	int x2[] = { 65,120,370,435,410,360,135,90};
-	int y2[] = { 240,135,135,240,240,155,155,240};
+	int y2[] = { 105,0,0,105,105,20,20,105 };
 
 	// The line points combination
-	int lys[] = { 240, 150 };
+	int lys[] = { 105, 15 };
 	int lxs[] = { 135, 190, 250, 310, 360 };
 
 
@@ -129,7 +130,7 @@ void Bridge::draw() const {
 		x1[i] *= (double)width / xtotal;
 		y1[i] *= sizey / ytotal;
 	}
-
+	
 	for (int i = 0; i < 8; i++) {
 		x2[i] *= (double)width / xtotal;
 		y2[i] *= sizey / ytotal;
@@ -147,6 +148,8 @@ void Bridge::draw() const {
 		x1[i] += x;
 		y1[i] += y;
 	}
+	
+
 	for (int i = 0; i < 8; i++) {
 		x2[i] += x;
 		y2[i] += y;
@@ -159,6 +162,7 @@ void Bridge::draw() const {
 
 
 	mainwin->DrawPolygon(x1, y1, 4);
+	
 	mainwin->DrawPolygon(x2, y2, 8);
 
 	// Connect the lines points
@@ -168,10 +172,10 @@ void Bridge::draw() const {
 		mainwin->DrawLine(lxs[i], lys[((i%2==0) ? 0  : 1)], lxs[i+1], lys[((i % 2 == 0) ? 1 : 0)]);
 
 	}
+	
 	mainwin->DrawLine(lxs[4], lys[0], lxs[4], lys[1]);
 
 }
-
 
 void Ship::draw() const {
 	window* mainwin = pGame->getWind();
@@ -272,17 +276,20 @@ void EnemyManeger::moveForward(int speed) {
 
 	for (int i = 0; i < jets.size(); i++) {
 		jets[i].set_y(jets[i].get_y() + speed);
+		jets[i].setverticalspeed(speed);
 		jets[i].moveVertical();
 
 	}
 	for (int i = 0; i < helis.size(); i++) {
 		helis[i].set_y(helis[i].get_y() + speed);
+		helis[i].setverticalspeed(speed);
 		helis[i].moveVertical();
 	}
 }
 
 void EnemyManeger::view(window& mainwin) const {
 	// View the tanks then briges then ships
+	//cout << tanks.size() + bridges.size() + ships.size() + jets.size() + helis.size();
 	for (int i = 0; i < tanks.size(); i++) {
 		tanks[i].draw();
 	}
@@ -302,27 +309,27 @@ void EnemyManeger::view(window& mainwin) const {
 }
 
 void EnemyManeger::update(int nspeed, int nlevel) {
-	cout << "here";
 	min_current_y = 100000;
 	srand(time(0));
 	speed = nspeed;
 	level = nlevel;
 	// This formale needs to be changed
-	tanknum = 2;
-	brigesnum = 2;
-	shipsnum = 2;
-	jetsnum = 2;
-	helisnum = 2;
+	double step = 200 - 50 * (speed + level);
+	int starty = -900, endy = -20;
+	tanknum = ceil(180/step);
+	brigesnum = ceil(180 / step);
+	shipsnum = ceil(180 / step);
+	jetsnum = ceil(180 / step);
+	helisnum = ceil(180 / step);
 
-	vector<int> yvalues = {
-		-900,
-		-772,
-		-644,
-		-516,
-		-388,
-		-260,
-		-132,
-	};
+	vector<int> yvalues = {};
+	this->max_size = step;
+
+	int total =  tanknum + brigesnum + shipsnum + jetsnum + helisnum;
+
+	for (int i = 0; i < total; i++) {
+		yvalues.push_back(starty + i * step);
+	}
 
 	// Generates a randome size and x and y and color based on the conditions set for each object
 	// notice i from otanknum to tanknum so that it would change the add ones only
@@ -330,6 +337,7 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 	for (int i = 0; i < jetsnum; i++) {
 		//int size = min_size + (rand() % (max_size - min_size + 1));
 		//jets[i].set_size(size);
+		if (!yvalues.size()) continue;
 		point p{ 0,0 };
 		jets.push_back(
 			EnemyPlane(game, p, 0, 0)
@@ -340,7 +348,6 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 		int x = -100;
 		// int y = min_y + (rand() % (local_max_y - min_y - 1));
 
-		if (!yvalues.size()) continue;
 		int yindex = floor(rand() % yvalues.size());
 		int y = yvalues[yindex];
 		yvalues.erase(yvalues.begin() + yindex);
@@ -355,11 +362,11 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 			min_current_y = jets.back().get_y();
 		}
 	}
-	
 
 	for (int i = 0; i < helisnum; i++) {
 		//int size = min_size + (rand() % (max_size - min_size + 1));
 		//helis[i].set_size(size);
+		if (!yvalues.size()) continue;
 		point p{ 0,0 };
 		helis.push_back(
 			EnemyHelicopter(game, p, 0, 0)
@@ -371,7 +378,6 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
 		// int y = min_y + (rand() % (local_max_y - min_y - 1));
 
-		if (!yvalues.size()) continue;
 		int yindex = floor(rand() % yvalues.size());
 		int y = yvalues[yindex];
 		yvalues.erase(yvalues.begin() + yindex);
@@ -392,14 +398,14 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 		int size = global_max_x - min_x;
 		if (!yvalues.size()) continue;
 		bridges.push_back(
-			Bridge(game, p, size, .4 * (size))
+			Bridge(game, p, size, .2 * (size))
 		);
 
 		int local_max_y = global_max_y - bridges.back().get_height();
 		int x = min_x;
 		// int y = min_y + (rand() % (local_max_y - min_y - 1));
 		int yindex = floor(rand() % yvalues.size());
-		int y = yvalues[yindex];
+		int y = yvalues[yindex] - size;
 		yvalues.erase(yvalues.begin() + yindex);
 
 		bridges.back().set_x(x);
@@ -429,7 +435,7 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 		// int y = min_y + (rand() % (local_max_y - min_y - 1));
 
 		int yindex = floor(rand() % yvalues.size());
-		int y = yvalues[yindex];
+		int y = yvalues[yindex] - size;
 		yvalues.erase(yvalues.begin() + yindex);
 
 		ships.back().set_x(x);
@@ -457,7 +463,7 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 		int x = min_x + (rand() % (local_max_x - min_x - 1));
 		// int y = min_y + (rand() % (local_max_y - min_y - 1));
 		int yindex = floor(rand() % yvalues.size());
-		int y = yvalues[yindex];
+		int y = yvalues[yindex] - size;
 		yvalues.erase(yvalues.begin() + yindex);
 	
 		tanks.back().set_x(x);
@@ -473,14 +479,83 @@ void EnemyManeger::update(int nspeed, int nlevel) {
 
 }
 
+void EnemyManeger::cleanUp(window *w)
+{
+	for (int i = 0; i < tanks.size(); i++) {
+		if (tanks[i].get_y() > w->GetHeight()) {
+			tanks.erase(tanks.begin() + i);
+			tanknum--;
+		}
+	}
+	for (int i = 0; i < bridges.size(); i++) {
+		if (bridges[i].get_y() > w->GetHeight()) {
+			bridges.erase(bridges.begin() + i);
+			brigesnum--;
+		}
+	}
+	for (int i = 0; i < ships.size(); i++) {
+		if (ships[i].get_y() > w->GetHeight()) {
+			ships.erase(ships.begin() + i);
+			shipsnum--;
+		}
+	}
 
-vector<const Enemy* > EnemyManeger::getAllEnemies() const {
+	for (int i = 0; i < jets.size(); i++) {
+		if (jets[i].get_y() > w->GetHeight()) {
+			jets.erase(jets.begin() + i);
+			jetsnum--;
+		}
+	}
+	for (int i = 0; i < helis.size(); i++) {
+		if (helis[i].get_y() > w->GetHeight()) {
+			helis.erase(helis.begin() + i);
+			helisnum--;
+		}
+	}
+}
+
+void EnemyManeger::deleteenemy(Enemy* E)
+{
+	for (int i = 0; i < tanks.size(); i++) {
+		if (&tanks[i] == E) {
+			tanks.erase(tanks.begin() + i);
+			tanknum--;
+			return;
+		}
+	}
+	for (int i = 0; i < bridges.size(); i++) {
+		if (&bridges[i] == E) {
+			bridges.erase(bridges.begin() + i);
+			brigesnum--;
+			return;
+		}
+	}
+	for (int i = 0; i < ships.size(); i++) {
+		if (&ships[i] == E) {
+			ships.erase(ships.begin() + i);
+			shipsnum--;
+			return;
+		}
+	}
+
+	for (int i = 0; i < jets.size(); i++) {
+		if (&jets[i] == E) {
+			jets.erase(jets.begin() + i);
+			jetsnum--;
+			return;
+		}
+	}
+	for (int i = 0; i < helis.size(); i++) {
+		if (&helis[i] == E) {
+			helis.erase(helis.begin() + i);
+			helisnum--;
+			return;
+		}
+	}
+}
+
+vector<const Enemy*> EnemyManeger::getAllEnemies() const {
 	vector<const Enemy* > allEnemies = {};
-	//allEnemies.insert(allEnemies.end(), tanks.begin(), tanks.end());
-	//allEnemies.insert(allEnemies.end(), bridges.begin(), bridges.end());
-	//allEnemies.insert(allEnemies.end(), ships.begin(), ships.end());
-	//allEnemies.insert(allEnemies.end(), jets.begin(), jets.end());
-	//allEnemies.insert(allEnemies.end(), helis.begin(), helis.end());
 
 	for (int i = 0; i < tanks.size(); i++) {
 		allEnemies.push_back(
@@ -511,45 +586,31 @@ vector<const Enemy* > EnemyManeger::getAllEnemies() const {
 	return allEnemies;
 }
 
-
 void EnemyPlane::draw() const {
 	window *w = pGame->getWind();
+	
 	w->SetPen(BLACK);
 	w->SetBrush(fillColor);
-	int width = 50 * size;
-	int height = 190 * size;
+
 	int x = RefPoint.x, y = RefPoint.y;
-	w->DrawRectangle(x-height, y - width, x, y);
-	int x1[] = { x - 20 * size, x - 40 * size, x - 100 * size, x - 80 * size };
-	int y1[] = { y, y + 100 * size, y + 100 * size, y };
+
+	int x1[] = { x + 20, x + 15, x, x + 5 };
+	int y1[] = { y + 30, y + 45, y + 45, y + 30 };
 	w->DrawPolygon(x1, y1, 4, FILLED);
-	int x2[] = { x - 20 * size,
-	x - 80 * size,
-	x - 100 * size,
-	x - 40 * size };
-	int y2[] = { y - (width - 1),
-	y - (width - 1),
-	y - (width + 100 * size - 1),
-	y - (width + 100 * size - 1) };
+	
+	int x2[] = { x + 20, x + 15, x, x + 5 };
+	int y2[] = { y+20, y +5, y +5, y+20 };
 	w->DrawPolygon(x2, y2, 4, FILLED);
-	int x3[] = { x - height + 50 * size,
-	x - height + 30 * size,
-	x - height - 20 * size,
-	x - height };
-	int y3[] = { y,
-	y + 50 * size,
-	y + 50 * size,
-	y };
+
+	int x3[] = { x + 45, x + 40, x + 25, x + 30 };
+	int y3[] = { y + 30, y + 55, y + 55, y + 30 };
 	w->DrawPolygon(x3, y3, 4, FILLED);
-	int x4[] = { x - height + 50 * size,
-	x - height,
-	x - height - 20 * size,
-	x - height + 30 * size };
-	int y4[] = { y - (width - 1),
-	y - (width - 1),
-	y - (width + 50 * size - 1),
-	y - (width + 50 * size - 1) };
+	
+	int x4[] = { x + 45, x + 40, x + 25, x + 30 };
+	int y4[] = { y + 25, y, y , y + 25 };
 	w->DrawPolygon(x4, y4, 4, FILLED);
+
+	w->DrawRectangle(x, y+20, x + 50, y + 35);
 }
 
 void EnemyPlane::moveVertical()
@@ -560,25 +621,30 @@ void EnemyPlane::moveVertical()
 
 void EnemyHelicopter::draw() const {
 	window* w = pGame->getWind();
+
 	int x = RefPoint.x, y = RefPoint.y;
 	w->SetPen(BLACK);
 	w->SetBrush(ORANGE);
-	w->DrawRectangle(x - 80 * size, y - 70 * size, x + 80 * size, y - (70 - 20) * size);
-	w->DrawRectangle(x - 10 * size, y - 80 * size, x + 10 * size, y + 80 * size);
+	w->DrawRectangle(x + 15, y + 5, x + 55, y + 10);
+	w->DrawRectangle(x + 33, y, x + 37, y + 40);
+
 	w->SetBrush(BLACK);
-	w->DrawRectangle(x - 150 * size, y + 10 * size, x + 70 * size, y - 10 * size);
-	w->DrawRectangle(x - 140 * size, y - 20 * size, x - 130 * size, y + 20 * size);
-	w->DrawRectangle(x - 40 * size, y + 60 * size, x + 40 * size, y + 80 * size);
+	w->DrawRectangle(x, y + 22, x + 40, y + 18);
+	w->DrawRectangle(x, y + 15, x + 5, y + 25);
+	w->DrawRectangle(x + 25, y + 35, x + 45, y + 40);
 	w->SetPen(BLACK);
 	w->SetBrush(fillColor);
-	w->DrawCircle(x, y, 50 * size);
+	w->DrawCircle(x + 35, y + 20, 10);
 }
 
 void EnemyHelicopter::moveVertical() {
 	if (get_y() >= 0) {
 		set_x(get_x() + verticalspeed);
-		if (get_x() > config.endRiver || get_x() < config.startRiver) {
-			verticalspeed = -verticalspeed;
+		if (get_x() + get_width() > config.endRiver) {
+			verticalspeed = -abs(verticalspeed);
+		}
+		else if (get_x() < config.startRiver) {
+			verticalspeed = abs(verticalspeed);
 		}
 	}
 }
